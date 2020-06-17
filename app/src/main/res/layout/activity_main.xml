@@ -5,50 +5,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:background="@drawable/hearts_big"
     tools:context=".MainActivity">
 
 
     <ImageView
         android:id="@+id/imageLogo"
-        android:layout_width="252dp"
-        android:layout_height="276dp"
+        android:layout_width="250dp"
+        android:layout_height="270dp"
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/bunny_transparent" />
 
     <EditText
-        android:id="@+id/textLogin"
+        android:id="@+id/textUsername"
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:layout_below="@+id/imageLogo"
         android:layout_centerHorizontal="true"
-        android:background="#11000000"
+        android:background="@color/colorField"
         android:drawableLeft="@drawable/ic_action_user"
         android:ems="10"
-        android:hint="Username"
+        android:hint="@string/username"
         android:inputType="textPersonName"
-        android:textColor="#fda7f2" />
+        android:textColor="@color/colorTextField" />
 
     <EditText
-        android:id="@+id/textPassword"
+        android:id="@+id/textUserPassword"
         android:layout_width="200dp"
         android:layout_height="40dp"
-        android:layout_marginTop="28dp"
-        android:background="#11000000"
-        android:textColor="#fda7f2"
+        android:layout_marginTop="25dp"
+        android:background="@color/colorField"
+        android:textColor="@color/colorTextField"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/password"
         android:drawableLeft="@drawable/ic_action_pass"
         android:inputType="textPassword"
-        android:layout_below="@+id/textLogin"
-        android:layout_alignLeft="@+id/textLogin"
-        android:layout_alignStart="@+id/textLogin"/>
+        android:layout_below="@+id/textUsername"
+        android:layout_alignLeft="@+id/textUsername"
+        android:layout_alignStart="@+id/textUsername"/>
+
+    <EditText
+        android:id="@+id/textUserPasswordConfirmation"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/colorField"
+        android:textColor="@color/colorTextField"
+        android:ems="10"
+        android:hint="@string/password_confirm"
+        android:drawableLeft="@drawable/ic_action_pass"
+        android:inputType="textPassword"
+        android:layout_below="@+id/textUserPassword"
+        android:layout_alignLeft="@+id/textUserPassword"
+        android:layout_alignStart="@+id/textUserPassword"/>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/cardViewRegister"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/textPassword"
+        android:layout_below="@+id/textUserPasswordConfirmation"
         android:layout_centerHorizontal="true"
         app:cardCornerRadius="15dp"
         app:cardElevation="1dp"
@@ -64,22 +79,22 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Login"
+                android:text="@string/register_here"
                 android:layout_centerInParent="true"
                 android:textSize="18sp"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/textRegister"
+        android:id="@+id/textLoginHere"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register Here"
+        android:text="@string/login_here"
         android:textSize="14sp"
         android:textColor="#ffffff"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/cardView"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/cardViewRegister"
         />
 
 </RelativeLayout>

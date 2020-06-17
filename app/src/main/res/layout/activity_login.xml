@@ -11,9 +11,10 @@
 
     <ImageView
         android:id="@+id/imageLogo"
-        android:layout_width="252dp"
-        android:layout_height="276dp"
+        android:layout_width="226dp"
+        android:layout_height="257dp"
         android:layout_centerHorizontal="true"
+        android:contentDescription="kroliczek"
         app:srcCompat="@drawable/bunny_transparent" />
 
     <EditText
@@ -33,7 +34,7 @@
         android:id="@+id/textUserPassword"
         android:layout_width="200dp"
         android:layout_height="40dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="25dp"
         android:background="@color/colorField"
         android:textColor="@color/colorTextField"
         android:ems="10"
@@ -46,14 +47,14 @@
 
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardLogin"
+        android:id="@+id/cardViewLogin"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_below="@+id/textUserPassword"
         android:layout_centerHorizontal="true"
         app:cardCornerRadius="15dp"
         app:cardElevation="1dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="25dp"
         >
 
         <RelativeLayout
@@ -72,15 +73,15 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/registerHere"
+        android:id="@+id/textRegisterHere"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/register_here"
         android:textSize="14sp"
         android:textColor="#ffffff"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/cardLogin"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/cardViewLogin"
         />
 
 </RelativeLayout>
