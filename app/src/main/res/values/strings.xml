@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">LoginScreen</string>
+    <string name="password">Hasło</string>
+    <string name="username">Użytkownik</string>
+    <string name="password_confirm">Potwierdź hasło</string>
+    <string name="register_here">Zarejestruj się</string>
+    <string name="login_here">Zaloguj się</string>
 </resources>

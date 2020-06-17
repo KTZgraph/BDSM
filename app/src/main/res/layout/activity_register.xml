@@ -25,7 +25,7 @@
         android:background="#11000000"
         android:drawableLeft="@drawable/ic_action_user"
         android:ems="10"
-        android:hint="Nazwa użytkownika"
+        android:hint="@string/username"
         android:inputType="textPersonName"
         android:textColor="#fda7f2" />
 
@@ -37,7 +37,7 @@
         android:background="#11000000"
         android:textColor="#fda7f2"
         android:ems="10"
-        android:hint="Hasło"
+        android:hint="@string/password"
         android:drawableLeft="@drawable/ic_action_pass"
         android:inputType="textPassword"
         android:layout_below="@+id/textUsername"
@@ -52,7 +52,7 @@
         android:background="#11000000"
         android:textColor="#fda7f2"
         android:ems="10"
-        android:hint="Powtórz hasło"
+        android:hint="@string/password_confirm"
         android:drawableLeft="@drawable/ic_action_pass"
         android:inputType="textPassword"
         android:layout_below="@+id/textUserPassword"
@@ -79,7 +79,7 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Zarejestruj się"
+                android:text="@string/register_here"
                 android:layout_centerInParent="true"
                 android:textSize="18sp"/>
         </RelativeLayout>
@@ -89,7 +89,7 @@
         android:id="@+id/textLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Zaloguj się"
+        android:text="@string/login_here"
         android:textSize="14sp"
         android:textColor="#ffffff"
         android:layout_centerHorizontal="true"
