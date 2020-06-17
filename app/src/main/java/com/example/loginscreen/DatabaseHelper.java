@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -25,29 +26,47 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //
-    public boolean insert(String username, String password){
-        //NIE KLEJĘ na chama stringa do sqla <3
+    public boolean register(String username, String rawPassword){
+
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
+
+        ContentValues contentValues = new ContentValues(); //NIE KLEJĘ na chama stringa do sqla <3
         contentValues.put("username", username);
-        contentValues.put("password", password);
+        contentValues.put("password", UserPassword.getPasswordHash(rawPassword)); // zaszyfrowane bcryptem
 
         long insertStatus = db.insert("user", null,  contentValues);
-//        if (insertStatus == 1) return false; else return  true;
-        if (insertStatus == 1){
-            return false;
-        }
-        else{
-            return true;
-        }
+
+        if (insertStatus == 1)return false;
+        else return false;
+
     }
 
     public boolean checkUsername(String username){
-        // sprawdzam cyz użytkownik już istnieje w bazie; tylko odczyt
+        // sprawdzam czy użytkownik już istnieje w bazie; tylko odczyt
         SQLiteDatabase db = this.getReadableDatabase();
-        // TODO: zmienic z raw query na coś bezpiecznsiejszego
+        // TODO: zmienic z raw query na coś bezpiecznsiejszego, bo ktoś zrobić śrendick czy coś i będzie problem
         Cursor cursor = db.rawQuery("SELECT * from user where username=?", new String[] {username});
         if (cursor.getCount()> 0) return false;
         else return  true;
     }
+
+    //sprawdzanie loginu i hasła
+    public Boolean login(String username, String rawPassword) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String hashPassword = "";
+
+        // TODO: zmienic z raw query na coś bezpiecznsiejszego, bo ktoś zrobić śrendick czy coś i będzie problem
+        Cursor cursor = db.rawQuery("SELECT password FROM user WHERE username=?", new String[]{username});
+        Log.i("DBHelper", "Kolumny: " + cursor.getColumnNames());
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            hashPassword = cursor.getString(cursor.getColumnIndex("password"));
+            Log.i("DatabaseHelper", "Get user password");
+
+        }
+
+        return UserPassword.comparePasswords(hashPassword, rawPassword);
+    }
+
 }

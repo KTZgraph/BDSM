@@ -3,9 +3,11 @@ package com.example.loginscreen;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 
@@ -27,12 +29,32 @@ public class LoginActivity extends Activity {
         textUsername = (EditText) findViewById(R.id.textUsername);
         textUserPassword = (EditText) findViewById(R.id.textUserPassword);
         cardViewLogin = (CardView) findViewById(R.id.cardViewLogin); //funkcja logowania
+        cardViewLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = textUsername.getText().toString();
+                String rawPassword = textUserPassword.getText().toString();
+                Boolean loginStatus = db.login(username, rawPassword);
+                Log.i("LOGIN", "przed bazą danych");
+                if (loginStatus == true) {
+                    Log.i("Login", "Logged succesfully");
+                    Toast.makeText(getApplicationContext(), "Zalgowano pomyślnie", Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(getApplicationContext(), "Nieprawidłowy login lub hasło", Toast.LENGTH_SHORT).show();
+                    Log.i("Login", "Login error for user: " + username);
+
+            }
+        });
+
+
 
         textRegisterHere = (TextView) findViewById(R.id.textRegisterHere);
         textRegisterHere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent registerIntent = new Intent(LoginActivity.this, MainActivity.class); //przekierowanie do rejestracji
+                Log.i("Activity", "Switch to MainActivity");
                 startActivity(registerIntent);
             }
         });
