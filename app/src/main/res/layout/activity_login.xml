@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:background="@drawable/hearts_big"
     tools:context=".MainActivity">
 
 
@@ -22,20 +22,20 @@
         android:layout_height="40dp"
         android:layout_below="@+id/imageLogo"
         android:layout_centerHorizontal="true"
-        android:background="#11000000"
+        android:background="@color/colorField"
         android:drawableLeft="@drawable/ic_action_user"
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
-        android:textColor="#fda7f2" />
+        android:textColor="@color/colorTextField" />
 
     <EditText
         android:id="@+id/textUserPassword"
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:layout_marginTop="28dp"
-        android:background="#11000000"
-        android:textColor="#fda7f2"
+        android:background="@color/colorField"
+        android:textColor="@color/colorTextField"
         android:ems="10"
         android:hint="@string/password"
         android:drawableLeft="@drawable/ic_action_pass"
@@ -46,7 +46,7 @@
 
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/cardLogin"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_below="@+id/textUserPassword"
@@ -72,7 +72,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/textLogin"
+        android:id="@+id/registerHere"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/register_here"
@@ -80,7 +80,7 @@
         android:textColor="#ffffff"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/cardView"
+        android:layout_below="@+id/cardLogin"
         />
 
 </RelativeLayout>

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:background="@drawable/hearts_big"
     tools:context=".MainActivity">
 
 
@@ -22,20 +22,20 @@
         android:layout_height="40dp"
         android:layout_below="@+id/imageLogo"
         android:layout_centerHorizontal="true"
-        android:background="#11000000"
+        android:background="@color/colorField"
         android:drawableLeft="@drawable/ic_action_user"
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
-        android:textColor="#fda7f2" />
+        android:textColor="@color/colorTextField" />
 
     <EditText
         android:id="@+id/textUserPassword"
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:layout_marginTop="28dp"
-        android:background="#11000000"
-        android:textColor="#fda7f2"
+        android:background="@color/colorField"
+        android:textColor="@color/colorTextField"
         android:ems="10"
         android:hint="@string/password"
         android:drawableLeft="@drawable/ic_action_pass"
@@ -49,8 +49,8 @@
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:layout_marginTop="28dp"
-        android:background="#11000000"
-        android:textColor="#fda7f2"
+        android:background="@color/colorField"
+        android:textColor="@color/colorTextField"
         android:ems="10"
         android:hint="@string/password_confirm"
         android:drawableLeft="@drawable/ic_action_pass"
