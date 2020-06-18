@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.nio.charset.StandardCharsets;
+
+import at.favre.lib.crypto.bcrypt.BCrypt;
+
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -29,10 +33,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean register(String username, String rawPassword){
 
         SQLiteDatabase db = this.getWritableDatabase();
+        String bcryptHashString = BCrypt.withDefaults().hashToString(12, rawPassword.toCharArray()); //surowe hasło do bcrypta
 
         ContentValues contentValues = new ContentValues(); //NIE KLEJĘ na chama stringa do sqla <3
         contentValues.put("username", username);
-        contentValues.put("password", UserPassword.getPasswordHash(rawPassword)); // zaszyfrowane bcryptem
+        contentValues.put("password", bcryptHashString); // zaszyfrowane bcryptem
 
         long insertStatus = db.insert("user", null,  contentValues);
 
@@ -63,10 +68,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             hashPassword = cursor.getString(cursor.getColumnIndex("password"));
             Log.i("DatabaseHelper", "Get user password");
-
         }
 
-        return UserPassword.comparePasswords(hashPassword, rawPassword);
+        BCrypt.Result result = BCrypt.verifyer().verify(rawPassword.toCharArray(), hashPassword);
+        if (result.verified) {
+            System.out.println(" It matches");
+            return true;
+        } else {
+            System.out.println(" It does not match");
+            return false;
+        }
     }
 
 }

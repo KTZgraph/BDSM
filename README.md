@@ -17,7 +17,7 @@ Potenjcalne pytania i odpowiedzi:
 - zmiana hasła użytkownika
 - Logi - nigdzie w logach nie przechowuję informacji o hasłach użytkownika; nawet przy niepoprawnym logowaniu
 - SQLI https://en.wikipedia.org/wiki/SQL_injection mam babola w  :<  Cursor cursor = db.rawQuery("SELECT password FROM user WHERE username=?", new String[]{username});
-
+- użyta biblioteka "Bouncy Castle" podobno super extra dla javy
 
 # Notatki
 - dodawanie nowej notatki
@@ -77,3 +77,43 @@ Pentesty na kiedyś:
 - Drozer https://github.com/FSecureLABS/drozer
 - LuckyPatcher https://www.dobreprogramy.pl/Lucky-Patcher,Program,Android,79201.html
 - GameGuardian https://gameguardian.net/download
+
+# Napotkane problemy
+- bcrypt nie porównuje haseł prawidłowo commit https://github.com/pawlaczyk/BDSM/commit/c522d9be75f68c81c6e82e231decca419ddff305
+https://stackoverflow.com/questions/43513880/comparing-hashed-passwords-with-salt-bcrypt-always-returns-false
+
+# problemy z bcryptem
+- https://www.baeldung.com/java-password-hashing
+"""5.3. Implementing BCrypt and SCrypt in Java
+So, it turns out that BCrypt and SCrypt support don't yet ship with Java, though some Java libraries support them.
+One of those libraries is Spring Security."""
+
+# przechowywanie haseł użytkowników
+https://nakedsecurity.sophos.com/2013/11/20/serious-security-how-to-store-your-users-passwords-safely/
+https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
+https://crackstation.net/hashing-security.htm
+https://cryptobook.nakov.com/crypto-libraries-for-developers/java-crypto-libraries
+
+## PBKDF2WithHmacSHA256 ##
+#Bouncy Castle
+https://stackoverflow.com/questions/8397557/bouncycastle-on-android
+You can also try the SpongyCastle library which is a precompiled build of BouncyCastle but tested with Android.
+
+https://github.com/rtyley/spongycastle
+
+# Przykład użycia Bouncy Castle
+https://stackoverflow.com/questions/22580853/reliable-implementation-of-pbkdf2-hmac-sha256-for-java
+
+# Czy to bezpieczne?
+https://security.stackexchange.com/questions/179204/using-pbkdf2-for-hash-and-aes-key-generation-implementation
+
+# fajne do api na kiedyś
+https://medium.com/@rhamedy/encryption-decryption-of-data-based-on-users-password-using-pbkdf2-aes-algorithms-592f8c1bb79a
+
+# //https://www.cryptoexamples.com/java_string_encryption_password_based_symmetric.html
+tutaj problemy         SecureRandom random = SecureRandom.getInstanceStrong(); // wspierana od android 30 o.Ó
+
+# próba z tą biblioteką
+https://www.mindrot.org/projects/jBCrypt/
+https://mvnrepository.com/artifact/org.mindrot/jbcrypt/0.4
+https://stackoverflow.com/questions/49530139/how-to-add-the-jbcrypt-library-in-android-studio dodawanie biblioteki
