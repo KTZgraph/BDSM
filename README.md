@@ -66,6 +66,7 @@ https://www.programcreek.com/java-api-examples/?class=android.database.Cursor&me
 - Aplikacja do robienia notatek - tutorial
 https://www.youtube.com/watch?v=3b5xxb8w7lI
 https://www.youtube.com/watch?v=0IIhK7cuM6A
+https://www.youtube.com/watch?v=pa_lghjVQVA
 
 
 - podpinanie bibliotek

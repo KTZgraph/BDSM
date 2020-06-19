@@ -1,6 +1,5 @@
 package com.example.loginscreen;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,7 +17,7 @@ import java.util.Calendar;
 
 public class AddNote extends AppCompatActivity {
     Toolbar toolbar;
-    EditText noteTile;
+    EditText noteTitle;
     EditText noteDetails;
     Calendar calendar;
     String todaysDate;
@@ -33,13 +32,13 @@ public class AddNote extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("New Note");
+        getSupportActionBar().setTitle("Nowa Notatka");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        noteTile = findViewById(R.id.noteTitle);
+        noteTitle = findViewById(R.id.noteTitle);
         noteDetails = findViewById(R.id.noteDetails);
 
-        noteTile.addTextChangedListener(new TextWatcher() {
+        noteTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -80,13 +79,25 @@ public class AddNote extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.save){
-            Toast.makeText(this, "SAVE btn clicked", Toast.LENGTH_SHORT).show();
-        }
         if (item.getItemId() == R.id.delete){
-            Toast.makeText(this, "DELETE btn clicked", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Note not saved", Toast.LENGTH_SHORT).show();
+            onBackPressed(); // powrot do rodzinca po usunieciu notatki
+        }
+
+        if (item.getItemId() == R.id.save){
+            Note note = new Note(noteTitle.getText().toString(), noteDetails.getText().toString(), todaysDate, currentTime);
+            NoteDatabase db = new NoteDatabase(this);
+            db.addNote(note);
+            Toast.makeText(this, "SAVE btn clicked", Toast.LENGTH_SHORT).show();
+            onBackPressed(); // powrot do rodzinca po dodaniu notatki
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

@@ -1,8 +1,14 @@
 package com.example.loginscreen;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NoteDatabase extends SQLiteOpenHelper {
 
@@ -25,12 +31,11 @@ public class NoteDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //CREATE table nametable(id NT PRMARY KEY, title TEXT, content TEXT , date TEXT, time TEXT);
         String query = "CREATE TABLE " + DATABASE_TABLE + "(" +
-                KEY_ID + " INT PRIMARY KEY, " +
-                KEY_TITLE + "TEXT, " +
-                KEY_CONTENT + "TEXT, " +
-                KEY_DATE + "TEXT, "+
-                KEY_TIME + "TEXT" +
-                ")";
+                KEY_ID      + " INT PRIMARY KEY, " +
+                KEY_TIME    + " TEXT, " +
+                KEY_CONTENT + " TEXT, " +
+                KEY_DATE    + " TEXT, " +
+                KEY_TITLE   + " TEXT" + ")";
 
         db.execSQL(query);
     }
@@ -42,5 +47,57 @@ public class NoteDatabase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
         onCreate(db);
 
+    }
+
+    public long addNote(Note note){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_TIME, note.getTime());
+        contentValues.put(KEY_CONTENT, note.getContent());
+        contentValues.put(KEY_DATE, note.getDate());
+        contentValues.put(KEY_TITLE, note.getTitle());
+
+        long ID = db.insert(DATABASE_TABLE, null, contentValues);
+        Log.d("NoteDatabase", "ID -> " + ID);
+        return ID;
+    }
+
+    public Note getNote(long id){
+        //pobieranie pojedynczej notatki
+        // "=?" zapobiega SQLInjection
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * from ";
+        Cursor cursor = db.query(DATABASE_TABLE, new String[]{KEY_ID, KEY_TITLE, KEY_CONTENT, KEY_DATE, KEY_TIME}, KEY_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null);
+
+        if(cursor != null)
+            cursor.moveToFirst(); //bo cursos zaczyna się zawsze od -1
+
+        return new Note(cursor.getLong(0), cursor.getString(1),
+                cursor.getString(2), cursor.getString(3), cursor.getString(4));
+    }
+
+    public List<Note> getAllNotes(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Note> allNotes = new ArrayList<>();
+        // wybieranie wszystkich danych z bazy
+
+        String query = "SELECT * FROM " + DATABASE_NAME;
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor != null){
+            do{
+                Note note = new Note();
+                note.setID(cursor.getLong(0));
+                note.setTitle(cursor.getString(1));
+                note.setContent(cursor.getString(2));
+                note.setDate(cursor.getString(3));
+                note.setTime(cursor.getString(4));
+
+                allNotes.add(note);
+            }while(cursor.moveToNext());
+        }
+
+        return allNotes;
     }
 }
