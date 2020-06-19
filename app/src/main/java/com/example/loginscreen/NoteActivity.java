@@ -11,11 +11,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
     Toolbar toolbar;
     RecyclerView recyclerView;
+    Adapter adapter;
+    List<Note> allNotes;
 
 
     @Override
@@ -24,18 +29,25 @@ public class NoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note); //widok rejestracji uzytkownika
         Log.i("NoteActivity", "przejscie do widoku notatek");
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Wszystkie Notatki");
+
+        NoteDatabase db = new NoteDatabase(this);
+        allNotes = db.getAllNotes();
+
         recyclerView = findViewById(R.id.listOfNotes);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new Adapter(this, allNotes);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i("onCreateOptionsMenu", "onCreateOptionsMenu");
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.add_menu, menu);
         return true;
-
     }
 
     @Override
@@ -51,5 +63,10 @@ public class NoteActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

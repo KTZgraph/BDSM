@@ -83,9 +83,9 @@ public class NoteDatabase extends SQLiteOpenHelper {
         List<Note> allNotes = new ArrayList<>();
         // wybieranie wszystkich danych z bazy
 
-        String query = "SELECT * FROM " + DATABASE_NAME;
+        String query = "SELECT * FROM " + DATABASE_TABLE;
         Cursor cursor = db.rawQuery(query, null);
-        if(cursor != null){
+        if(cursor != null && cursor.moveToFirst()){
             do{
                 Note note = new Note();
                 note.setID(cursor.getLong(0));

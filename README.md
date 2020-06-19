@@ -146,6 +146,8 @@ https://stackoverflow.com/questions/49530139/how-to-add-the-jbcrypt-library-in-a
         
      Gradle
         implementation 'com.google.android.material:material:1.1.0'
+        
+      Java
        import androidx.appcompat.widget.Toolbar;
 
  

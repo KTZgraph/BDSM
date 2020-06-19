@@ -17,12 +17,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".NoteActivity"></activity>
-        <activity android:name=".AddNote">
+
+        <activity android:name=".NoteActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NoteActivity" />
+                android:value=".LoginActivity" />
         </activity>
+
+        <activity android:name=".AddNote"></activity>
     </application>
 
 </manifest>
