@@ -1,11 +1,15 @@
 package com.example.loginscreen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.EditText;
-
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -27,8 +31,10 @@ public class AddNote extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("New Note");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         noteTile = findViewById(R.id.noteTitle);
         noteDetails = findViewById(R.id.noteDetails);
@@ -41,7 +47,7 @@ public class AddNote extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length() != 0){
+                if(s.length() != 0 || s.equals("") || s.equals(" ")){
                     getSupportActionBar().setTitle(s);
                 }
             }
@@ -63,5 +69,24 @@ public class AddNote extends AppCompatActivity {
     private String pad(int i) {
         if(i<10) return "0" + i;
         else return String.valueOf(i);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.save_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.save){
+            Toast.makeText(this, "SAVE btn clicked", Toast.LENGTH_SHORT).show();
+        }
+        if (item.getItemId() == R.id.delete){
+            Toast.makeText(this, "DELETE btn clicked", Toast.LENGTH_SHORT).show();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

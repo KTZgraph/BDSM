@@ -14,7 +14,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/gradient"/>
+        android:background="@drawable/gradient"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <EditText
         android:id="@+id/noteTitle"
@@ -39,7 +40,7 @@
         android:layout_height="590dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"

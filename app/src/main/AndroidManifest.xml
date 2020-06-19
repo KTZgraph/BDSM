@@ -18,7 +18,11 @@
         </activity>
         <activity android:name=".LoginActivity"></activity>
         <activity android:name=".NoteActivity"></activity>
-        <activity android:name=".AddNote"></activity>
+        <activity android:name=".AddNote">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NoteActivity" />
+        </activity>
     </application>
 
 </manifest>
