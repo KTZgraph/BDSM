@@ -24,29 +24,39 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        db = new DatabaseHelper(this);
+//        db = new DatabaseHelper(this);
 
-        textUsername = (EditText) findViewById(R.id.textUsername);
-        textUserPassword = (EditText) findViewById(R.id.textUserPassword);
-        cardViewLogin = (CardView) findViewById(R.id.cardViewLogin); //funkcja logowania
-        cardViewLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = textUsername.getText().toString();
-                String rawPassword = textUserPassword.getText().toString();
-                Boolean loginStatus = db.login(username, rawPassword);
-                Log.i("LOGIN", "przed bazą danych");
-                if (loginStatus == true) {
-                    Log.i("Login", "Logged succesfully");
-                    Toast.makeText(getApplicationContext(), "Zalgowano pomyślnie", Toast.LENGTH_SHORT).show();
-                }
-                else
-                    Toast.makeText(getApplicationContext(), "Nieprawidłowy login lub hasło", Toast.LENGTH_SHORT).show();
-                    Log.i("Login", "Login error for user: " + username);
 
-            }
-        });
+        // NA RAIZE TYLKO NOTATKI TESTUJE
+        Intent noteIntent = new Intent(LoginActivity.this, NoteActivity.class);
+        Log.i("Login", "Chce przejsc do widoku notatek");
+        startActivity(noteIntent);
 
+//
+//        textUsername = (EditText) findViewById(R.id.textUsername);
+//        textUserPassword = (EditText) findViewById(R.id.textUserPassword);
+//        cardViewLogin = (CardView) findViewById(R.id.cardViewLogin); //funkcja logowania
+//        cardViewLogin.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String username = textUsername.getText().toString();
+//                String rawPassword = textUserPassword.getText().toString();
+//                Boolean loginStatus = db.login(username, rawPassword);
+//                Log.i("LOGIN", "przed bazą danych");
+//                if (loginStatus == true) {
+//                    Log.i("Login", "Logged succesfully");
+//                    Toast.makeText(getApplicationContext(), "Zalgowano pomyślnie", Toast.LENGTH_SHORT).show();
+//                    Intent noteIntent = new Intent(LoginActivity.this, NoteActivity.class);
+//                    Log.i("Login", "Chce przejsc do widoku notatek");
+//                    startActivity(noteIntent);
+//                }
+//                else
+//                    Toast.makeText(getApplicationContext(), "Nieprawidłowy login lub hasło", Toast.LENGTH_SHORT).show();
+//                    Log.i("Login", "Login error for user: " + username);
+//
+//            }
+//        });
+//
 
 
         textRegisterHere = (TextView) findViewById(R.id.textRegisterHere);

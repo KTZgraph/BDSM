@@ -70,14 +70,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.i("DatabaseHelper", "Get user password");
         }
 
-        BCrypt.Result result = BCrypt.verifyer().verify(rawPassword.toCharArray(), hashPassword);
-        if (result.verified) {
-            System.out.println(" It matches");
-            return true;
-        } else {
-            System.out.println(" It does not match");
-            return false;
+        try {
+            Log.i("DatabaseHelper", "bcrypt sie zaczyna");
+
+            // dokladnie to samo co https://www.codota.com/code/java/packages/at.favre.lib.crypto.bcrypt
+            BCrypt.Result result = BCrypt.verifyer().verify(rawPassword.toCharArray(), hashPassword);
+            if (result.verified) {
+                System.out.println(" It matches");
+                Log.i("DatabaseHelper",  "It matches");
+
+                return true;
+            } else {
+                System.out.println(" It does not match");
+                Log.i("DatabaseHelper",  "It does not match");
+
+                return false;
+            }
+
+        }catch (Exception e){
+            Log.i("Database helper", "hashe porownywanie sie zestralo");
         }
+
+        return false;
     }
 
 }

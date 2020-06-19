@@ -12,8 +12,6 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
-
 public class MainActivity extends Activity {
     DatabaseHelper db;
 
@@ -55,6 +53,8 @@ public class MainActivity extends Activity {
                             if (registerStatus == true){
                                 Toast.makeText(getApplicationContext(), "Rejestracja powiodła się", Toast.LENGTH_SHORT).show();
                                 Log.i("Register", "Registered successfully");
+                                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                                startActivity(loginIntent);
                             }
                         }else{
                             //nieprawidłowa rejestracja

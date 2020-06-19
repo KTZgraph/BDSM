@@ -63,6 +63,13 @@ https://www.programcreek.com/java-api-examples/?class=android.database.Cursor&me
 -> metoda login z klasy DatabaseHelper.java
 -> https://stackoverrun.com/vi/q/2702505
 
+- Aplikacja do robienia notatek
+https://www.youtube.com/watch?v=3b5xxb8w7lI
+- podpinanie bibliotek
+    https://stackoverflow.com/questions/55761551/how-to-fix-error-failed-to-resolve-androidx-cardviewcardview1-0-0
+- constraint layout
+https://www.youtube.com/watch?v=4N4bCdyGcUc
+
 PBKDF2
 https://gist.github.com/scotttam/874426/e5a0e1317995e9388083eb455c5bb160ec2e1afd
 
@@ -117,3 +124,9 @@ tutaj problemy         SecureRandom random = SecureRandom.getInstanceStrong(); /
 https://www.mindrot.org/projects/jBCrypt/
 https://mvnrepository.com/artifact/org.mindrot/jbcrypt/0.4
 https://stackoverflow.com/questions/49530139/how-to-add-the-jbcrypt-library-in-android-studio dodawanie biblioteki
+ https://github.com/advisories/GHSA-gp32-7h29-rpxm
+ 
+ 
+#Bouncy Castle
+https://stackoverflow.com/questions/55187472/bouncycastle-connect-to-android-studio
+implementation 'org.bouncycastle:bcpkix-jdk15on:1.56'
