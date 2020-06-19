@@ -63,8 +63,11 @@ https://www.programcreek.com/java-api-examples/?class=android.database.Cursor&me
 -> metoda login z klasy DatabaseHelper.java
 -> https://stackoverrun.com/vi/q/2702505
 
-- Aplikacja do robienia notatek
+- Aplikacja do robienia notatek - tutorial
 https://www.youtube.com/watch?v=3b5xxb8w7lI
+https://www.youtube.com/watch?v=0IIhK7cuM6A
+
+
 - podpinanie bibliotek
     https://stackoverflow.com/questions/55761551/how-to-fix-error-failed-to-resolve-androidx-cardviewcardview1-0-0
 - constraint layout
@@ -126,7 +129,24 @@ https://mvnrepository.com/artifact/org.mindrot/jbcrypt/0.4
 https://stackoverflow.com/questions/49530139/how-to-add-the-jbcrypt-library-in-android-studio dodawanie biblioteki
  https://github.com/advisories/GHSA-gp32-7h29-rpxm
  
+#Toolbar
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorPrimary"/>
+        
+        implementation 'com.google.android.material:material:1.1.0'
+
+       import androidx.appcompat.widget.Toolbar;
+
  
 #Bouncy Castle
 https://stackoverflow.com/questions/55187472/bouncycastle-connect-to-android-studio
 implementation 'org.bouncycastle:bcpkix-jdk15on:1.56'
+
+
+# ANDROID onCreateOptionsMenu not called
