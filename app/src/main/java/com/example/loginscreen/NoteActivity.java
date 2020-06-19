@@ -33,6 +33,7 @@ public class NoteActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Wszystkie Notatki");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         NoteDatabase db = new NoteDatabase(this);
         allNotes = db.getAllNotes();

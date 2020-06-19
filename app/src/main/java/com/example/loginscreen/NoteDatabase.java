@@ -74,8 +74,14 @@ public class NoteDatabase extends SQLiteOpenHelper {
         if(cursor != null)
             cursor.moveToFirst(); //bo cursos zaczyna się zawsze od -1
 
-        return new Note(cursor.getLong(0), cursor.getString(1),
-                cursor.getString(2), cursor.getString(3), cursor.getString(4));
+        Note note = new Note();
+        note.setID(cursor.getLong(cursor.getColumnIndex(KEY_ID)));
+        note.setTime(cursor.getString(cursor.getColumnIndex(KEY_TIME)));
+        note.setDate(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
+        note.setContent(cursor.getString(cursor.getColumnIndex(KEY_CONTENT)));
+        note.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
+
+        return note;
     }
 
     public List<Note> getAllNotes(){
@@ -88,11 +94,11 @@ public class NoteDatabase extends SQLiteOpenHelper {
         if(cursor != null && cursor.moveToFirst()){
             do{
                 Note note = new Note();
-                note.setID(cursor.getLong(0));
-                note.setTitle(cursor.getString(1));
-                note.setContent(cursor.getString(2));
-                note.setDate(cursor.getString(3));
-                note.setTime(cursor.getString(4));
+                note.setID(cursor.getLong(cursor.getColumnIndex(KEY_ID)));
+                note.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
+                note.setContent(cursor.getString(cursor.getColumnIndex(KEY_CONTENT)));
+                note.setDate(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
+                note.setTime(cursor.getString(cursor.getColumnIndex(KEY_TIME)));
 
                 allNotes.add(note);
             }while(cursor.moveToNext());
