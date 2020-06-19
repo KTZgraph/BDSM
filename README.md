@@ -130,6 +130,10 @@ https://stackoverflow.com/questions/49530139/how-to-add-the-jbcrypt-library-in-a
  https://github.com/advisories/GHSA-gp32-7h29-rpxm
  
 #Toolbar
+    Manifest
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+    Layout
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -139,8 +143,8 @@ https://stackoverflow.com/questions/49530139/how-to-add-the-jbcrypt-library-in-a
         app:layout_constraintTop_toTopOf="parent"
         android:background="@color/colorPrimary"/>
         
+     Gradle
         implementation 'com.google.android.material:material:1.1.0'
-
        import androidx.appcompat.widget.Toolbar;
 
  

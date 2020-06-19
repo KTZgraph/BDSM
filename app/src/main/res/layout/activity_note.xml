@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/hearts_big"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -14,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/colorPrimary"/>
+        android:background="@drawable/gradient"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listOfNotes"
