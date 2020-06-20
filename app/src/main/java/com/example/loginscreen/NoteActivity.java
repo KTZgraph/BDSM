@@ -31,7 +31,7 @@ public class NoteActivity extends AppCompatActivity {
         Log.i("NoteActivity", "przejscie do widoku notatek");
         toolbar = findViewById(R.id.toolbar);
 //        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        toolbar.setNavigationIcon(R.drawable.white_arrow);
+        toolbar.setNavigationIcon(R.drawable.hear_arrow_white_small);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Wszystkie Notatki");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -29,7 +29,7 @@ Potenjcalne pytania i odpowiedzi:
 - jak zabezpieczony jest widok
 - jak zabezpieczone są operacja CRUD przed niezalogowanym użytkownikiem
 - Czy po zdobyciu praw roota da się odczytać hasła użytkowników
-- szyfrowanie bazy danych
+- szyfrowanie bazy danych https://pl.qwe.wiki/wiki/Database_encryption
 - wymuszanie mocnych haseł na użytkowniku; walidacja hasła
 - dodawanie danych do bazy - nie kleić na chama Stringa - zabezpieczenia przed SQLInjection
 

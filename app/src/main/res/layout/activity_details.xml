@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/hearts_big"
+    android:background="@drawable/hearts_big_background"
     tools:context=".DetailsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:background="#BD0202"
-        app:srcCompat="@drawable/black_broken_heart" />
+        app:backgroundTint="#FF0202"
+        app:srcCompat="@drawable/heart_delete" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

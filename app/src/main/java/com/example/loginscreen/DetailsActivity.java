@@ -26,7 +26,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.white_arrow);
+        toolbar.setNavigationIcon(R.drawable.hear_arrow_white_small);
         setSupportActionBar(toolbar);
 
         detailsOfNote = findViewById(R.id.detailsOfNote);

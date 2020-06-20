@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/editNote"
-        android:icon="@drawable/heart_pen_tranparency"
+        android:icon="@drawable/heart_edit"
         android:title="Edit"
         app:showAsAction="ifRoom" />
 </menu>

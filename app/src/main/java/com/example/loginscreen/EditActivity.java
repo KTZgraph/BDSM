@@ -40,7 +40,7 @@ public class EditActivity extends AppCompatActivity {
         note = db.getNote(id);
 
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.white_arrow);
+        toolbar.setNavigationIcon(R.drawable.hear_arrow_white_small);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(note.getTitle());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
