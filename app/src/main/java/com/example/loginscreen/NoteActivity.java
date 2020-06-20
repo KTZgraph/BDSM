@@ -30,10 +30,12 @@ public class NoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note); //widok rejestracji uzytkownika
         Log.i("NoteActivity", "przejscie do widoku notatek");
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+//        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        toolbar.setNavigationIcon(R.drawable.white_arrow);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Wszystkie Notatki");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         NoteDatabase db = new NoteDatabase(this);
         allNotes = db.getAllNotes();
