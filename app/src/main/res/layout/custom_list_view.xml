@@ -10,7 +10,6 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -33,12 +32,15 @@
 
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_launcher_background" />
+                    app:srcCompat="@drawable/heart2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -50,17 +52,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/constraintLayout"
                 app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="2dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:srcCompat="@drawable/heart2" />
 
                 <TextView
                     android:id="@+id/noteTitle"
@@ -89,8 +80,9 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:text="19/06/2020"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/noteTitle"
@@ -102,10 +94,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:text="22:05"
-                    android:textSize="16sp"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/noteDate"
-                    app:layout_constraintStart_toEndOf="@+id/noteDate" />
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/noteDate"
+                    app:layout_constraintTop_toBottomOf="@+id/noteTitle"
+                    app:layout_constraintVertical_bias="0.19" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

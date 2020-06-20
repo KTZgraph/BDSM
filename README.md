@@ -67,7 +67,7 @@ https://www.programcreek.com/java-api-examples/?class=android.database.Cursor&me
 https://www.youtube.com/watch?v=3b5xxb8w7lI
 https://www.youtube.com/watch?v=0IIhK7cuM6A
 https://www.youtube.com/watch?v=pa_lghjVQVA
-
+https://www.youtube.com/watch?v=4beEQ6JeuVw
 
 - podpinanie bibliotek
     https://stackoverflow.com/questions/55761551/how-to-fix-error-failed-to-resolve-androidx-cardviewcardview1-0-0

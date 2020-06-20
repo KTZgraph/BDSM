@@ -1,5 +1,6 @@
 package com.example.loginscreen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -91,10 +92,15 @@ public class AddNote extends AppCompatActivity {
             NoteDatabase db = new NoteDatabase(this);
             db.addNote(note);
             Toast.makeText(this, "SAVE btn clicked", Toast.LENGTH_SHORT).show();
-            onBackPressed(); // powrot do rodzinca po dodaniu notatki
+            goToParentActivity(); // powrot do rodzinca po dodaniu notatki
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void goToParentActivity() {
+        Intent intentNoteActivity = new Intent(this, NoteActivity.class);
+        startActivity(intentNoteActivity);
     }
 
 
