@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/add"
-        android:icon="@drawable/ic_add_white_24dp"
+        android:icon="@drawable/heart_plus_2"
         android:title="Add"
         app:showAsAction="ifRoom" />
 </menu>
