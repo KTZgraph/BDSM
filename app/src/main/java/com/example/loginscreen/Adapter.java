@@ -1,10 +1,12 @@
 package com.example.loginscreen;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,6 +58,16 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             noteTile = itemView.findViewById(R.id.noteTitle);
             noteDate = itemView.findViewById(R.id.noteDate);
             noteTime = itemView.findViewById(R.id.noteTime);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intentDetailsActivity = new Intent(v.getContext(), DetailsActivity.class);
+                    intentDetailsActivity.putExtra("noteID",allNotes.get(getAdapterPosition()).getID());
+                    v.getContext().startActivity(intentDetailsActivity);
+                }
+            });
+
         }
     }
 }

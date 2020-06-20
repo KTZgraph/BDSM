@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.nio.charset.StandardCharsets;
-
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
 
@@ -20,6 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // TODO: zrobić id ale tak żeby nie dało się enrumerować użytkowników
         db.execSQL("CREATE TABLE user(username text primary key, password text)");
 
     }

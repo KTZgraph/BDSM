@@ -5,4 +5,5 @@
     <string name="password_confirm">Potwierdź hasło</string>
     <string name="register_here">Zarejestruj się</string>
     <string name="login_here">Zaloguj się</string>
+    <string name="title_activity_details">DetailsActivity</string>
 </resources>
