@@ -32,7 +32,7 @@ public class AddNote extends AppCompatActivity {
         setContentView(R.layout.activity_add_note);
         toolbar = findViewById(R.id.toolbar);
 //        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        toolbar.setNavigationIcon(R.drawable.hear_arrow_white_small);
+        toolbar.setNavigationIcon(R.drawable.heart_back);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Nowa Notatka");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

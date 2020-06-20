@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="navigationIcon">@drawable/hear_arrow_white_small</item>
+        <item name="navigationIcon">@drawable/heart_back</item>
 
     </style>
 
