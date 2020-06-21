@@ -52,7 +52,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            noteTile = itemView.findViewById(R.id.notePassword);
+            noteTile = itemView.findViewById(R.id.noteOldPassword);
             noteDate = itemView.findViewById(R.id.noteDate);
             noteTime = itemView.findViewById(R.id.noteTime);
 

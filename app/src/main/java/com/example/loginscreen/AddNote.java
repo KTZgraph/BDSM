@@ -24,6 +24,9 @@ public class AddNote extends AppCompatActivity {
     String todaysDate;
     String currentTime;
 
+
+    String rawTmpPassword = "Bar12345Bar12345";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("AddNote", "Przejscie do widoku dodawania notatek");
@@ -36,7 +39,7 @@ public class AddNote extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        rawPassword = findViewById(R.id.notePassword);
+        rawPassword = findViewById(R.id.noteOldPassword);
         noteContent = findViewById(R.id.noteContent);
 
         noteContent.addTextChangedListener(new TextWatcher() {
@@ -89,7 +92,8 @@ public class AddNote extends AppCompatActivity {
             // Tworzenie nowej notatki
             Note note;
             try {
-                note = new Note(rawPassword.getText().toString(), noteContent.getText().toString(), todaysDate, currentTime);
+//                note = new Note(rawPassword.getText().toString(), noteContent.getText().toString(), todaysDate, currentTime);
+                note = new Note(rawTmpPassword, noteContent.getText().toString(), todaysDate, currentTime);
                 NoteDatabase db = new NoteDatabase(this);
                 db.addNote(note);
                 Toast.makeText(this, "Notatka zapisana", Toast.LENGTH_SHORT).show();

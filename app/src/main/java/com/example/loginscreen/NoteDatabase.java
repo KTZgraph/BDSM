@@ -73,6 +73,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
     }
 
     public Note getNote(long id){
+        // ROZSZYFROWUJĘ DOPIERO W ACTIVITY
         //pobieranie pojedynczej notatki
         // "=?" zapobiega SQLInjection
         SQLiteDatabase db = this.getReadableDatabase();
@@ -108,7 +109,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         note.setSalt(cursor.getBlob(cursor.getColumnIndex(KEY_SALT)));
 
         // wektor inicjalizujacy
-        note.setIv(cursor.getString(cursor.getColumnIndex(KEY_IV)));
+        note.setIv(cursor.getBlob(cursor.getColumnIndex(KEY_IV)));
 
         return note;
     }
@@ -138,8 +139,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
                 byte[] salt = cursor.getBlob(cursor.getColumnIndex(KEY_SALT));
                 note.setSalt(salt);
 
-
-                note.setIv(cursor.getString(cursor.getColumnIndex(KEY_IV)));
+                byte[] iv = cursor.getBlob(cursor.getColumnIndex(KEY_IV));
+                note.setIv(iv);
 
                 allNotes.add(note);
             }while(cursor.moveToNext());

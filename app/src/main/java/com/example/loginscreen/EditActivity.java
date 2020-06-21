@@ -15,7 +15,16 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Calendar;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class EditActivity extends AppCompatActivity {
     NoteDatabase db;
@@ -27,6 +36,8 @@ public class EditActivity extends AppCompatActivity {
     Calendar calendar;
     String todaysDate;
     String currentTime;
+    String rawTmpPassword = "Bar12345Bar12345";
+
 
 
     @Override
@@ -45,11 +56,11 @@ public class EditActivity extends AppCompatActivity {
 //        getSupportActionBar().setTitle(note.getPasswordAES());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        noteTitle = findViewById(R.id.notePassword);
+        noteTitle = findViewById(R.id.noteOldPassword);
         noteDetails = findViewById(R.id.noteContent);
 
 //        noteTitle.setText(note.getPasswordAES());
-        noteDetails.setText(note.getPlainText());
+        noteDetails.setText(note.getPlainText(this.rawTmpPassword));
         noteDetails.setMovementMethod(new ScrollingMovementMethod());
 
         noteTitle.addTextChangedListener(new TextWatcher() {
@@ -100,8 +111,15 @@ public class EditActivity extends AppCompatActivity {
         }
 
         if (item.getItemId() == R.id.save){
-            note.setCiphertext(noteDetails.getText().toString());
-//            note.setPasswordAES(noteTitle.getText().toString());
+            // AKTUALIZACJA NOTATKI
+            String newRawPassword = "";
+            String newContext = "";
+            try {
+                note.update("", rawTmpPassword,noteDetails.getText().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d("Edit activity", "Note update error");
+            }
 
             int id = db.editNote(note);
             if(id >= 0){

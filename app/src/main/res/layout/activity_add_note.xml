@@ -18,7 +18,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <EditText
-        android:id="@+id/notePassword"
+        android:id="@+id/noteOldPassword"
         android:layout_width="345dp"
         android:layout_height="46dp"
         android:layout_marginStart="16dp"
@@ -51,7 +51,7 @@
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notePassword" />
+        app:layout_constraintTop_toBottomOf="@+id/noteOldPassword" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
