@@ -19,7 +19,6 @@ public class DetailsActivity extends AppCompatActivity {
     NoteDatabase db;
     TextView detailsOfNote;
     Note note;
-    String rawTmpPassword = "Bar12345Bar12345";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +32,15 @@ public class DetailsActivity extends AppCompatActivity {
 
         Intent intentDetailsActivity = getIntent();
         Long id = intentDetailsActivity.getLongExtra("noteID", 0);
+        String noteRawPassword = intentDetailsActivity.getStringExtra("noteRawPassword"); //TODO
+
         db = new NoteDatabase(this);
         note = db.getNote(id);
 
         getSupportActionBar().setTitle(note.getDate());
-        detailsOfNote.setText(note.getPlainText(this.rawTmpPassword));
+        detailsOfNote.setText(note.getPlainText(noteRawPassword)); // TODO
 
-        Toast.makeText(this, "DetailsActivity -> " + note.getPlainText(this.rawTmpPassword), Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(this, "DetailsActivity -> " + note.getPlainText(noteRawPassword), Toast.LENGTH_SHORT).show(); //TODO
         FloatingActionButton fab = findViewById(R.id.deleteButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

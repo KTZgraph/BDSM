@@ -39,7 +39,7 @@ public class AddNote extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        rawPassword = findViewById(R.id.noteOldPassword);
+        rawPassword = findViewById(R.id.notePassword);
         noteContent = findViewById(R.id.noteContent);
 
         noteContent.addTextChangedListener(new TextWatcher() {

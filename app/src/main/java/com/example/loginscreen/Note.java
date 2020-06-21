@@ -1,11 +1,8 @@
 package com.example.loginscreen;
 
 import android.util.Base64;
-import android.util.Log;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -22,7 +19,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -44,22 +40,10 @@ public class Note {
     Note(){}
 
     Note(String rawPassword, String content, String date, String time) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, IOException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidParameterSpecException, InvalidAlgorithmParameterException {
-        // NOWA notatka bez id
         this.date = date;
         this.time = time;
         this.salt = generateSalt();
-//        encryptMessage(content);
-        // tylko szyfrowanie
-        String enc = encrypt(rawPassword, content);
-
         this.ciphertext = encrypt(rawPassword, content);
-        Log.i("Note construtot: ", "Original text: "+content);
-        Log.i("Note construtot: ", "Encrypted text: "+enc);
-
-        String plainAfter= decrypt(rawPassword, enc);
-        Log.i("Note construtot: ", "Encrypted text: "+enc);
-        Log.i("Note construtot: ", "Original text after decryption: "+plainAfter);
-
     }
 
     Note(long id, String rawPassword, String content, String date, String time) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, IOException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidParameterSpecException, InvalidAlgorithmParameterException {
@@ -153,7 +137,6 @@ public class Note {
 
     public String  getPlainText(String rawPassword){
         try{
-
             return decrypt(rawPassword, getCiphertext());
 
         }catch (Exception e){
@@ -162,7 +145,6 @@ public class Note {
         return "JAKIE SBLEDY z AESEM";
     }
 
-    // HASlaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     public byte[] generateSalt() throws NoSuchAlgorithmException, InvalidKeySpecException {
         /* Derive the key, given password and salt. */
         SecureRandom random = new SecureRandom();
@@ -171,8 +153,6 @@ public class Note {
         //ustawainia soli w obiekcie
         return salt;
     }
-
-
 
 
     //https://stackoverflow.com/questions/23561104/how-to-encrypt-and-decrypt-string-with-my-passphrase-in-java-pc-not-mobile-plat/32583766
@@ -204,6 +184,7 @@ public class Note {
         return encStr;
     }
 
+    //https://stackoverflow.com/questions/23561104/how-to-encrypt-and-decrypt-string-with-my-passphrase-in-java-pc-not-mobile-plat/32583766
     public String decrypt(String secretKey, String encryptedText)
             throws NoSuchAlgorithmException,
             InvalidKeySpecException,

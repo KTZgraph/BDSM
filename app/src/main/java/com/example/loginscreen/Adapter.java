@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     LayoutInflater inflater;
     List<Note> allNotes;
+
+    String rawTmpPassword = "Bar12345Bar12345";
+
 
     Adapter(Context context, List<Note> allNotes){
         this.inflater = LayoutInflater.from(context);
@@ -46,13 +50,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView noteTile;
+        EditText noteRawPassword;
         TextView noteDate;
         TextView noteTime;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            noteTile = itemView.findViewById(R.id.noteOldPassword);
+            noteRawPassword = itemView.findViewById(R.id.notePassword);
+            // TODO: sprawdzanie czy user podał dobre haslo
             noteDate = itemView.findViewById(R.id.noteDate);
             noteTime = itemView.findViewById(R.id.noteTime);
 
@@ -61,6 +66,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 public void onClick(View v) {
                     Intent intentDetailsActivity = new Intent(v.getContext(), DetailsActivity.class);
                     intentDetailsActivity.putExtra("noteID",allNotes.get(getAdapterPosition()).getID());
+//                    intentDetailsActivity.putExtra("noteRawPassword", noteRawPassword.getText().toString()); // TODO przekazanie hasła z notatki
+                    intentDetailsActivity.putExtra("noteRawPassword", rawTmpPassword); // TODO przekazanie hasła z notatki
                     v.getContext().startActivity(intentDetailsActivity);
                 }
             });

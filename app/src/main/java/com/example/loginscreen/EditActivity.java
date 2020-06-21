@@ -15,16 +15,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Calendar;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 public class EditActivity extends AppCompatActivity {
     NoteDatabase db;
@@ -56,7 +47,7 @@ public class EditActivity extends AppCompatActivity {
 //        getSupportActionBar().setTitle(note.getPasswordAES());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        noteTitle = findViewById(R.id.noteOldPassword);
+        noteTitle = findViewById(R.id.notePassword);
         noteDetails = findViewById(R.id.noteContent);
 
 //        noteTitle.setText(note.getPasswordAES());
