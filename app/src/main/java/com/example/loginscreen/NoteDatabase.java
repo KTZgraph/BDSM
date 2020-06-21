@@ -18,10 +18,13 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
     // columns name for database table
     private static final String KEY_ID = "id";
-    private static final String KEY_TITLE = "title";
-    private static final String KEY_CONTENT = "content";
     private static final String KEY_DATE = "date";
     private static final String KEY_TIME = "time";
+    private static final String KEY_CIPHERTEXT = "ciphertext";
+    private static final String KEY_SECRET = "secret";
+    private static final String KEY_SALT = "salt";
+    private static final String KEY_IV = "iv";
+
 
     NoteDatabase(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -30,12 +33,16 @@ public class NoteDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //CREATE table nametable(id NT PRMARY KEY, title TEXT, content TEXT , date TEXT, time TEXT);
-        String query = "CREATE TABLE " + DATABASE_TABLE + "(" +
-                KEY_ID      + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                KEY_TIME    + " TEXT, " +
-                KEY_CONTENT + " TEXT, " +
-                KEY_DATE    + " TEXT, " +
-                KEY_TITLE   + " TEXT" + ")";
+        String query = "CREATE TABLE " + DATABASE_TABLE +
+                "(" +
+                    KEY_ID          + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    KEY_TIME        + " TEXT, " +
+                    KEY_DATE        + " TEXT, " +
+                    KEY_CIPHERTEXT  + " TEXT, " +
+                    KEY_SECRET      + " TEXT, " +
+                    KEY_SALT        + " TEXT, " +
+                    KEY_IV          + " TEXT " +
+                ")";
 
         db.execSQL(query);
     }
@@ -54,9 +61,11 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_TIME, note.getTime());
-        contentValues.put(KEY_CONTENT, note.getContent());
         contentValues.put(KEY_DATE, note.getDate());
-        contentValues.put(KEY_TITLE, note.getTitle());
+        contentValues.put(KEY_CIPHERTEXT, note.getCiphertext());
+        contentValues.put(KEY_SECRET, note.getSecret().toString());
+        contentValues.put(KEY_SALT, note.getSalt());
+        contentValues.put(KEY_IV, note.getIv());
 
         long ID = db.insert(DATABASE_TABLE, null, contentValues);
         Log.d("NoteDatabase", "ID -> " + ID);
@@ -68,7 +77,17 @@ public class NoteDatabase extends SQLiteOpenHelper {
         // "=?" zapobiega SQLInjection
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * from ";
-        Cursor cursor = db.query(DATABASE_TABLE, new String[]{KEY_ID, KEY_TITLE, KEY_CONTENT, KEY_DATE, KEY_TIME}, KEY_ID + "=?",
+        Cursor cursor = db.query(DATABASE_TABLE,
+                new String[]{
+                        KEY_ID,
+                        KEY_TIME,
+                        KEY_DATE,
+                        KEY_CIPHERTEXT,
+                        KEY_SECRET,
+                        KEY_SALT,
+                        KEY_IV
+                        }, KEY_ID + "=?",
+
                 new String[]{String.valueOf(id)}, null, null, null);
 
         if(cursor != null)
@@ -78,8 +97,18 @@ public class NoteDatabase extends SQLiteOpenHelper {
         note.setID(cursor.getLong(cursor.getColumnIndex(KEY_ID)));
         note.setTime(cursor.getString(cursor.getColumnIndex(KEY_TIME)));
         note.setDate(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
-        note.setContent(cursor.getString(cursor.getColumnIndex(KEY_CONTENT)));
-        note.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
+
+        // trewsc notatki
+        note.setCiphertext(cursor.getString(cursor.getColumnIndex(KEY_CIPHERTEXT)));
+
+        // hasło aes
+        note.setSecret(cursor.getString(cursor.getColumnIndex(KEY_SECRET)));
+
+        // sól
+        note.setSalt(cursor.getBlob(cursor.getColumnIndex(KEY_SALT)));
+
+        // wektor inicjalizujacy
+        note.setIv(cursor.getString(cursor.getColumnIndex(KEY_IV)));
 
         return note;
     }
@@ -95,10 +124,22 @@ public class NoteDatabase extends SQLiteOpenHelper {
             do{
                 Note note = new Note();
                 note.setID(cursor.getLong(cursor.getColumnIndex(KEY_ID)));
-                note.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
-                note.setContent(cursor.getString(cursor.getColumnIndex(KEY_CONTENT)));
                 note.setDate(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
                 note.setTime(cursor.getString(cursor.getColumnIndex(KEY_TIME)));
+
+                // trewsc notatki
+                note.setCiphertext(cursor.getString(cursor.getColumnIndex(KEY_CIPHERTEXT)));
+
+                // hasło aes
+                note.setSecret(cursor.getString(cursor.getColumnIndex(KEY_SECRET)));
+
+                // sól
+//                note.setSalt(cursor.getString(cursor.getColumnIndex(KEY_SALT)));
+                byte[] salt = cursor.getBlob(cursor.getColumnIndex(KEY_SALT));
+                note.setSalt(salt);
+
+
+                note.setIv(cursor.getString(cursor.getColumnIndex(KEY_IV)));
 
                 allNotes.add(note);
             }while(cursor.moveToNext());
@@ -110,11 +151,15 @@ public class NoteDatabase extends SQLiteOpenHelper {
     public int editNote(Note note){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        Log.d("EDITED DB", "Edited title -> " + note.getTitle() + "\n ID ->" + note.getID());
-        contentValues.put(KEY_TITLE, note.getTitle());
-        contentValues.put(KEY_CONTENT, note.getContent());
+        Log.d("EDITED DB", "Edited password -> " + note.getSecret() + "\n ID ->" + note.getID());
         contentValues.put(KEY_DATE, note.getDate());
         contentValues.put(KEY_TIME, note.getTime());
+
+        contentValues.put(KEY_CIPHERTEXT, note.getCiphertext());
+        contentValues.put(KEY_SECRET, note.getSecret());
+        contentValues.put(KEY_SALT, note.getSalt());
+        contentValues.put(KEY_IV, note.getIv());
+
         return db.update(DATABASE_TABLE, contentValues, KEY_ID+"=?", new String[]{String.valueOf(note.getID())});
     }
 

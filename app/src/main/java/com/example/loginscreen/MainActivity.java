@@ -28,7 +28,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main); //widok rejestracji uzytkownika
         db = new DatabaseHelper(this);
 
-
         textUsername = (EditText) findViewById(R.id.textUsername);
         textUserPassword = (EditText) findViewById(R.id.textUserPassword);
         textUserPasswordConfirmation = (EditText) findViewById(R.id.textUserPasswordConfirmation);

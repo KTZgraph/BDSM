@@ -18,12 +18,11 @@ import java.util.Calendar;
 
 public class AddNote extends AppCompatActivity {
     Toolbar toolbar;
-    EditText noteTitle;
-    EditText noteDetails;
+    EditText rawPassword;
+    EditText noteContent;
     Calendar calendar;
     String todaysDate;
     String currentTime;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +30,16 @@ public class AddNote extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
         toolbar = findViewById(R.id.toolbar);
-//        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         toolbar.setNavigationIcon(R.drawable.heart_back);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Nowa Notatka");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        noteTitle = findViewById(R.id.noteTitle);
-        noteDetails = findViewById(R.id.noteDetails);
+        rawPassword = findViewById(R.id.notePassword);
+        noteContent = findViewById(R.id.noteContent);
 
-        noteTitle.addTextChangedListener(new TextWatcher() {
+        noteContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -88,10 +86,18 @@ public class AddNote extends AppCompatActivity {
         }
 
         if (item.getItemId() == R.id.save){
-            Note note = new Note(noteTitle.getText().toString(), noteDetails.getText().toString(), todaysDate, currentTime);
-            NoteDatabase db = new NoteDatabase(this);
-            db.addNote(note);
-            Toast.makeText(this, "SAVE btn clicked", Toast.LENGTH_SHORT).show();
+            // Tworzenie nowej notatki
+            Note note;
+            try {
+                note = new Note(rawPassword.getText().toString(), noteContent.getText().toString(), todaysDate, currentTime);
+                NoteDatabase db = new NoteDatabase(this);
+                db.addNote(note);
+                Toast.makeText(this, "Notatka zapisana", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Błąd - notatka nie zapisana", Toast.LENGTH_SHORT).show();
+            }
+
             goToParentActivity(); // powrot do rodzinca po dodaniu notatki
         }
 

@@ -1,6 +1,22 @@
 # BDSM
 Bezpieczeństwo Danych Systemów Mobilnych
 
+szyfrować wszystko osobno, każda notatka inny iv4, pbkdf2 albo salt.
+
+https://developer.android.com/guide/topics/security/cryptography#java
+- czyli bouncy castle nie używać
+Bouncy Castle algorithms
+The Bouncy Castle implementations of many algorithms are deprecated. This only affects cases where you explicitly request the Bouncy Castle provider, as shown in the following example:
+
+
+#AES
+- wybrałam AES bo wiadomość/ notatka jest dłuższa niż klucz
+- https://medium.com/@hakkitoklu/aes256-encryption-decryption-in-android-2fae6938fc2b
+- In Cipher Block Chaining (CBC), a random initialization vector (IV) is generated for each message https://stackoverflow.com/questions/992019/java-256-bit-aes-passwordAES-based-encryption
+
+# AES z hasłem użytkownika
+- https://stackoverflow.com/questions/992019/java-256-bit-aes-passwordAES-based-encryption
+
 Potenjcalne pytania i odpowiedzi:
 # Ogólne
 - Poprawna rejestracja (prezentacja)
@@ -16,7 +32,7 @@ Potenjcalne pytania i odpowiedzi:
 - wylogowywanie użytkownika
 - zmiana hasła użytkownika
 - Logi - nigdzie w logach nie przechowuję informacji o hasłach użytkownika; nawet przy niepoprawnym logowaniu
-- SQLI https://en.wikipedia.org/wiki/SQL_injection mam babola w  :<  Cursor cursor = db.rawQuery("SELECT password FROM user WHERE username=?", new String[]{username});
+- SQLI https://en.wikipedia.org/wiki/SQL_injection mam babola w  :<  Cursor cursor = db.rawQuery("SELECT passwordAES FROM user WHERE username=?", new String[]{username});
 - użyta biblioteka "Bouncy Castle" podobno super extra dla javy
 
 # Notatki
@@ -52,10 +68,10 @@ https://github.com/patrickfav/bcrypt
 Ostatnia wersja biblioteki https://github.com/patrickfav/bcrypt/releases to 0.9.0
 
 - Java tworzenie hashowanych haseł
-https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/#PBKDF2WithHmacSHA1
+https://howtodoinjava.com/security/how-to-generate-secure-passwordAES-hash-md5-sha-pbkdf2-bcrypt-examples/#PBKDF2WithHmacSHA1
 
 - Walidacja polityki haseł użytkownika
--> https://examples.javacodegeeks.com/core-java/util/regex/matcher/validate-password-with-java-regular-expression-example/
+-> https://examples.javacodegeeks.com/core-java/util/regex/matcher/validate-passwordAES-with-java-regular-expression-example/
 -> klasa UserPassword.java
 
 - Wyciąganie konkretnego pola z bazy
@@ -94,14 +110,14 @@ Pentesty na kiedyś:
 https://stackoverflow.com/questions/43513880/comparing-hashed-passwords-with-salt-bcrypt-always-returns-false
 
 # problemy z bcryptem
-- https://www.baeldung.com/java-password-hashing
+- https://www.baeldung.com/java-passwordAES-hashing
 """5.3. Implementing BCrypt and SCrypt in Java
 So, it turns out that BCrypt and SCrypt support don't yet ship with Java, though some Java libraries support them.
 One of those libraries is Spring Security."""
 
 # przechowywanie haseł użytkowników
 https://nakedsecurity.sophos.com/2013/11/20/serious-security-how-to-store-your-users-passwords-safely/
-https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
+https://howtodoinjava.com/security/how-to-generate-secure-passwordAES-hash-md5-sha-pbkdf2-bcrypt-examples/
 https://crackstation.net/hashing-security.htm
 https://cryptobook.nakov.com/crypto-libraries-for-developers/java-crypto-libraries
 
@@ -119,7 +135,7 @@ https://stackoverflow.com/questions/22580853/reliable-implementation-of-pbkdf2-h
 https://security.stackexchange.com/questions/179204/using-pbkdf2-for-hash-and-aes-key-generation-implementation
 
 # fajne do api na kiedyś
-https://medium.com/@rhamedy/encryption-decryption-of-data-based-on-users-password-using-pbkdf2-aes-algorithms-592f8c1bb79a
+https://medium.com/@rhamedy/encryption-decryption-of-data-based-on-users-passwordAES-using-pbkdf2-aes-algorithms-592f8c1bb79a
 
 # //https://www.cryptoexamples.com/java_string_encryption_password_based_symmetric.html
 tutaj problemy         SecureRandom random = SecureRandom.getInstanceStrong(); // wspierana od android 30 o.Ó

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -36,10 +35,10 @@ public class DetailsActivity extends AppCompatActivity {
         db = new NoteDatabase(this);
         note = db.getNote(id);
 
-        getSupportActionBar().setTitle(note.getTitle());
-        detailsOfNote.setText(note.getContent());
+        getSupportActionBar().setTitle(note.getDate());
+        detailsOfNote.setText(note.getPlainText());
 
-        Toast.makeText(this, "Title -> " + note.getTitle(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "DetailsActivity -> " + note.getPlainText(), Toast.LENGTH_SHORT).show();
 
         FloatingActionButton fab = findViewById(R.id.deleteButton);
         fab.setOnClickListener(new View.OnClickListener() {

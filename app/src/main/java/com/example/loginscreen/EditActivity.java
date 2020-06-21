@@ -42,14 +42,14 @@ public class EditActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.heart_back);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(note.getTitle());
+//        getSupportActionBar().setTitle(note.getPasswordAES());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        noteTitle = findViewById(R.id.noteTitle);
-        noteDetails = findViewById(R.id.noteDetails);
+        noteTitle = findViewById(R.id.notePassword);
+        noteDetails = findViewById(R.id.noteContent);
 
-        noteTitle.setText(note.getTitle());
-        noteDetails.setText(note.getContent());
+//        noteTitle.setText(note.getPasswordAES());
+        noteDetails.setText(note.getPlainText());
         noteDetails.setMovementMethod(new ScrollingMovementMethod());
 
         noteTitle.addTextChangedListener(new TextWatcher() {
@@ -100,8 +100,8 @@ public class EditActivity extends AppCompatActivity {
         }
 
         if (item.getItemId() == R.id.save){
-            note.setContent(noteDetails.getText().toString());
-            note.setTitle(noteTitle.getText().toString());
+            note.setCiphertext(noteDetails.getText().toString());
+//            note.setPasswordAES(noteTitle.getText().toString());
 
             int id = db.editNote(note);
             if(id >= 0){

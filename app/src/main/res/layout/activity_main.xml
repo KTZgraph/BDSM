@@ -39,7 +39,7 @@
         android:background="@color/colorField"
         android:textColor="@color/colorTextField"
         android:ems="10"
-        android:hint="@string/password"
+        android:hint="@string/passwordAES"
         android:drawableLeft="@drawable/heart_key_white"
         android:inputType="textPassword"
         android:layout_below="@+id/textUsername"
