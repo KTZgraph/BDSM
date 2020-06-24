@@ -21,6 +21,34 @@ The Bouncy Castle implementations of many algorithms are deprecated. This only a
 # SQLCipher
 - https://github.com/sqlcipher/android-database-sqlcipher
 - https://www.youtube.com/watch?v=mehBt5LJF84
+- jak sprawdizć czy baza jest zaszyfrowana?
+-> https://discuss.zetetic.net/t/android-how-to-check-if-a-database-is-already-encrypted/1481
+"""You could attempt to read the first 16 bytes of the database file, a plain text SQLite database will have the value SQLite format 3\000, SQLCipher will store per database salt in this location so the value will be different. """
+- jak (nie)przechowywac hasła do bazy danych użytkownika 
+-> https://discuss.zetetic.net/t/sqlcipher-database-key-material-and-selection/25
+At least a substantial part of the key material for SQLCipher databases should come directly from the user, and should not be stored on the device itself (i.e. a passphrase).
+The key material should not be hard coded into an application.
+- używanie silnej kryptografii Restrictions
+-> https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47
+""" When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries."""
+-> Zabezpieczenia jakie oferuje sqliCipher
+https://www.zetetic.net/sqlcipher/design/
+"""The encryption algorithm is 256-bit AES in CBC mode"""
+"""SQLCipher does not implement its own encryption. Instead it uses the widely available encryption libraries like OpenSSL libcrypto, LibTomCrypt, and CommonCrypto for all cryptographic functions."""
+- ustawianie zabezpieczeń - pragma
+-> https://discuss.zetetic.net/t/upgrading-to-sqlcipher-4/3283
+[PRAGMA cipher_compatibility = 3;]
+PRAGMA cipher_page_size = 1024;
+PRAGMA kdf_iter = 64000;
+PRAGMA cipher_hmac_algorithm = HMAC_SHA1;
+PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;
+
+[sqlite> PRAGMA cipher = ‘aes-256-cfb’;] NIE DA SIĘ :<
+-> brak możliwosci zmiany trybu szyfrowania :<
+https://discuss.zetetic.net/t/pragma-cipher-command-is-deprecated-please-remove-from-usage/1766/3
+jedynie za pomoca : SQLiteDatabaseHook
+mogę zrobić
+"""database.rawExecSQL("PRAGMA kdf_iter = 64000;");"""
 
 
 Potenjcalne pytania i odpowiedzi:

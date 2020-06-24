@@ -6,20 +6,28 @@ import android.util.Log;
 
 
 // ----------------- zamiana importów na umożliwienie szyfrowania bazy danych
-//import android.database.Cursor;
 import net.sqlcipher.Cursor;
-//import android.database.sqlite.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteDatabase;
-//import android.database.sqlite.SQLiteOpenHelper;
+import net.sqlcipher.database.SQLiteDatabaseHook;
 import net.sqlcipher.database.SQLiteOpenHelper;
-
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class NoteDatabase extends SQLiteOpenHelper {
     private static NoteDatabase instance; //Singleton
+    private static SQLiteDatabaseHook hook = new SQLiteDatabaseHook(){
+        public void preKey(SQLiteDatabase database){
+            database.rawExecSQL("PRAGMA kdf_iter = 64000;");
+//            database.rawExecSQL("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;");
+//            database.rawExecSQL("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;");
+//            database.rawExecSQL("PRAGMA cipher = ‘aes-256-cfb’;"); // nie można zmieniac na CTR ani nawet na OFB :<
+        }
+        public void postKey(SQLiteDatabase database){}
+    };
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "notes2.db";
@@ -43,7 +51,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
     }
 
     public NoteDatabase(Context context){
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION, hook);
     }
 
 
