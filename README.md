@@ -17,6 +17,12 @@ The Bouncy Castle implementations of many algorithms are deprecated. This only a
 # AES z hasłem użytkownika
 - https://stackoverflow.com/questions/992019/java-256-bit-aes-passwordAES-based-encryption
 
+
+# SQLCipher
+- https://github.com/sqlcipher/android-database-sqlcipher
+- https://www.youtube.com/watch?v=mehBt5LJF84
+
+
 Potenjcalne pytania i odpowiedzi:
 # Ogólne
 - Poprawna rejestracja (prezentacja)

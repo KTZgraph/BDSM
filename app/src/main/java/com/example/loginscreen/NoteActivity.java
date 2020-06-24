@@ -14,6 +14,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.sqlcipher.database.SQLiteDatabase;
+
 import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
@@ -28,6 +30,8 @@ public class NoteActivity extends AppCompatActivity {
         // Notatki
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note); //widok rejestracji uzytkownika
+        SQLiteDatabase.loadLibs(this); // TODO
+
         Log.i("NoteActivity", "przejscie do widoku notatek");
         toolbar = findViewById(R.id.toolbar);
 //        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
@@ -37,7 +41,7 @@ public class NoteActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        NoteDatabase db = new NoteDatabase(this);
+        NoteDatabase db =  NoteDatabase.getInstance(NoteActivity.this);
         allNotes = db.getAllNotes();
 
         recyclerView = findViewById(R.id.listOfNotes);

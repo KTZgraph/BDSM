@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.sqlcipher.database.SQLiteDatabase;
+
 public class DetailsActivity extends AppCompatActivity {
     NoteDatabase db;
     TextView detailsOfNote;
@@ -24,6 +26,9 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+        SQLiteDatabase.loadLibs(this); // TODO
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.heart_back);
         setSupportActionBar(toolbar);
@@ -34,7 +39,7 @@ public class DetailsActivity extends AppCompatActivity {
         Long id = intentDetailsActivity.getLongExtra("noteID", 0);
         String noteRawPassword = intentDetailsActivity.getStringExtra("noteRawPassword"); //TODO
 
-        db = new NoteDatabase(this);
+        db = NoteDatabase.getInstance(DetailsActivity.this);
         note = db.getNote(id);
 
         getSupportActionBar().setTitle(note.getDate());

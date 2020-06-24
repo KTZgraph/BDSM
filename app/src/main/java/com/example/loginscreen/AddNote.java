@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import net.sqlcipher.database.SQLiteDatabase;
+
 import java.util.Calendar;
 
 
@@ -32,6 +34,9 @@ public class AddNote extends AppCompatActivity {
         Log.i("AddNote", "Przejscie do widoku dodawania notatek");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
+        SQLiteDatabase.loadLibs(this); // TODO
+
+
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.heart_back);
         setSupportActionBar(toolbar);
@@ -94,7 +99,7 @@ public class AddNote extends AppCompatActivity {
             try {
 //                note = new Note(rawPassword.getText().toString(), noteContent.getText().toString(), todaysDate, currentTime);
                 note = new Note(rawTmpPassword, noteContent.getText().toString(), todaysDate, currentTime);
-                NoteDatabase db = new NoteDatabase(this);
+                NoteDatabase db = NoteDatabase.getInstance(AddNote.this);
                 db.addNote(note);
                 Toast.makeText(this, "Notatka zapisana", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {

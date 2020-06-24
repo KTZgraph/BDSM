@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import net.sqlcipher.database.SQLiteDatabase;
+
 import java.util.Calendar;
 
 public class EditActivity extends AppCompatActivity {
@@ -35,10 +37,12 @@ public class EditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        SQLiteDatabase.loadLibs(this); // TODO
+
 
         Intent intentEditNote = getIntent();
         Long id = intentEditNote.getLongExtra("noteID", 0);
-        db = new NoteDatabase(this);
+        db =  NoteDatabase.getInstance(EditActivity.this);
         note = db.getNote(id);
 
         toolbar = findViewById(R.id.toolbar);

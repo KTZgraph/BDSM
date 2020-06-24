@@ -2,18 +2,27 @@ package com.example.loginscreen;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+
+// ----------------- zamiana importów na umożliwienie szyfrowania bazy danych
+//import android.database.Cursor;
+import net.sqlcipher.Cursor;
+//import android.database.sqlite.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteDatabase;
+//import android.database.sqlite.SQLiteOpenHelper;
+import net.sqlcipher.database.SQLiteOpenHelper;
+
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoteDatabase extends SQLiteOpenHelper {
+    private static NoteDatabase instance; //Singleton
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "notes.db";
+    private static final String DATABASE_NAME = "notes2.db";
     private static final String DATABASE_TABLE = "note";
 
     // columns name for database table
@@ -25,10 +34,18 @@ public class NoteDatabase extends SQLiteOpenHelper {
     private static final String KEY_SALT = "salt";
     private static final String KEY_IV = "iv";
 
+    public static final String PASS_PHARSE = "!@#ABC"; // hasło dla bazy
 
-    NoteDatabase(Context context){
+    static public synchronized NoteDatabase getInstance(Context context){
+        if(instance == null){
+            instance = new NoteDatabase(context);
+        }return instance;
+    }
+
+    public NoteDatabase(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -57,7 +74,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
     }
 
     public long addNote(Note note){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE);
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_TIME, note.getTime());
@@ -69,6 +86,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
         long ID = db.insert(DATABASE_TABLE, null, contentValues);
         Log.d("NoteDatabase", "ID -> " + ID);
+        db.close();
         return ID;
     }
 
@@ -76,7 +94,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         // ROZSZYFROWUJĘ DOPIERO W ACTIVITY
         //pobieranie pojedynczej notatki
         // "=?" zapobiega SQLInjection
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE);
         String query = "SELECT * from ";
         Cursor cursor = db.query(DATABASE_TABLE,
                 new String[]{
@@ -111,11 +129,12 @@ public class NoteDatabase extends SQLiteOpenHelper {
         // wektor inicjalizujacy
         note.setIv(cursor.getBlob(cursor.getColumnIndex(KEY_IV)));
 
+        db.close();
         return note;
     }
 
     public List<Note> getAllNotes(){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE);
         List<Note> allNotes = new ArrayList<>();
         // wybieranie wszystkich danych z bazy
 
@@ -146,11 +165,12 @@ public class NoteDatabase extends SQLiteOpenHelper {
             }while(cursor.moveToNext());
         }
 
+        db.close();
         return allNotes;
     }
 
     public int editNote(Note note){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE);
         ContentValues contentValues = new ContentValues();
         Log.d("EDITED DB", "Edited password -> " + note.getSecret() + "\n ID ->" + note.getID());
         contentValues.put(KEY_DATE, note.getDate());
@@ -161,13 +181,17 @@ public class NoteDatabase extends SQLiteOpenHelper {
         contentValues.put(KEY_SALT, note.getSalt());
         contentValues.put(KEY_IV, note.getIv());
 
-        return db.update(DATABASE_TABLE, contentValues, KEY_ID+"=?", new String[]{String.valueOf(note.getID())});
+        int editValue = db.update(DATABASE_TABLE, contentValues, KEY_ID+"=?", new String[]{String.valueOf(note.getID())});
+        db.close();
+        return editValue;
     }
 
 
     void deleteNote(long id){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE);
         db.delete(DATABASE_TABLE, KEY_ID+"=?", new String[] {String.valueOf(id)});
         db.close();
     }
+
+
 }

@@ -27,7 +27,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:background="#CCFFFFFF"
-        android:drawableLeft="@drawable/padlock"
         android:ems="10"
         android:hint="Hasło dla notatki"
         android:inputType="textPassword"
