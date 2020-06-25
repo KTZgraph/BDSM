@@ -17,6 +17,9 @@ import android.widget.Toast;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
 public class DetailsActivity extends AppCompatActivity {
     NoteDatabase db;
     TextView detailsOfNote;
@@ -39,7 +42,11 @@ public class DetailsActivity extends AppCompatActivity {
         Long id = intentDetailsActivity.getLongExtra("noteID", 0);
         String noteRawPassword = intentDetailsActivity.getStringExtra("noteRawPassword"); //TODO
 
-        db = NoteDatabase.getInstance(DetailsActivity.this);
+        try {
+            db = NoteDatabase.getInstance(DetailsActivity.this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         note = db.getNote(id);
 
         getSupportActionBar().setTitle(note.getDate());

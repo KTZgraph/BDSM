@@ -27,21 +27,30 @@ public class NoteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Notatki
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_note); //widok rejestracji uzytkownika
-        SQLiteDatabase.loadLibs(this); // TODO
+        setContentView(R.layout.activity_note);
+        SQLiteDatabase.loadLibs(this);
 
         Log.i("NoteActivity", "przejscie do widoku notatek");
         toolbar = findViewById(R.id.toolbar);
-//        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        toolbar.setNavigationIcon(R.drawable.heart_back);
+        toolbar.setNavigationIcon(R.drawable.heart_back); // TODO TODO TODO
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Wszystkie Notatki");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        NoteDatabase db =  NoteDatabase.getInstance(NoteActivity.this);
+        NoteDatabase db = null; // TODO tutaj problemy
+
+        try {
+            db = NoteDatabase.getInstance(NoteActivity.this);
+            Log.i("NoteDatabase db", "db: " + db);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.i("BAza", "db = NoteDatabase.getInstance(NoteActivity.this)");
+            Log.i("BAza", e.toString());
+        } // TODo wyjątki
+
         allNotes = db.getAllNotes();
 
         recyclerView = findViewById(R.id.listOfNotes);

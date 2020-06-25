@@ -42,7 +42,11 @@ public class EditActivity extends AppCompatActivity {
 
         Intent intentEditNote = getIntent();
         Long id = intentEditNote.getLongExtra("noteID", 0);
-        db =  NoteDatabase.getInstance(EditActivity.this);
+        try {
+            db =  NoteDatabase.getInstance(EditActivity.this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         note = db.getNote(id);
 
         toolbar = findViewById(R.id.toolbar);

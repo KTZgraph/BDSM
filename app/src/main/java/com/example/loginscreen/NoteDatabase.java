@@ -12,6 +12,8 @@ import net.sqlcipher.database.SQLiteDatabaseHook;
 import net.sqlcipher.database.SQLiteOpenHelper;
 
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,18 +21,10 @@ import java.util.List;
 
 public class NoteDatabase extends SQLiteOpenHelper {
     private static NoteDatabase instance; //Singleton
-    private static SQLiteDatabaseHook hook = new SQLiteDatabaseHook(){
-        public void preKey(SQLiteDatabase database){
-            database.rawExecSQL("PRAGMA kdf_iter = 64000;");
-//            database.rawExecSQL("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;");
-//            database.rawExecSQL("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;");
-//            database.rawExecSQL("PRAGMA cipher = ‘aes-256-cfb’;"); // nie można zmieniac na CTR ani nawet na OFB :<
-        }
-        public void postKey(SQLiteDatabase database){}
-    };
+
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "notes2.db";
+    private static final String BASE_DATABASE_NAME = "notes_";
     private static final String DATABASE_TABLE = "note";
 
     // columns name for database table
@@ -42,16 +36,34 @@ public class NoteDatabase extends SQLiteOpenHelper {
     private static final String KEY_SALT = "salt";
     private static final String KEY_IV = "iv";
 
-    public static final String PASS_PHARSE = "!@#ABC"; // hasło dla bazy
+    //TODO
+    public static final String PASS_PHARSE = "!@#ABC"; // hasło dla bazy; na razie na sztywno
 
-    static public synchronized NoteDatabase getInstance(Context context){
-        if(instance == null){
-            instance = new NoteDatabase(context);
+
+
+    static public  NoteDatabase getInstance(Context context) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        if(instance == null){ //TODO - tutaj PROBLEMY
+            synchronized (NoteDatabase.class) {
+                if(instance == null) { // podwojny chceck w singletonie
+                    instance = new NoteDatabase(context);
+                }
+            }
         }return instance;
     }
 
-    public NoteDatabase(Context context){
-        super(context, DATABASE_NAME, null, DATABASE_VERSION, hook);
+    private static SQLiteDatabaseHook hook = new SQLiteDatabaseHook(){
+        public void preKey(SQLiteDatabase database){
+            database.rawExecSQL("PRAGMA kdf_iter = 64000;");
+//            database.rawExecSQL("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;");
+//            database.rawExecSQL("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;");
+//            database.rawExecSQL("PRAGMA cipher = ‘aes-256-cfb’;"); // nie można zmieniac na CTR ani nawet na OFB :<
+        }
+        public void postKey(SQLiteDatabase database){}
+    };
+
+
+    public NoteDatabase(Context context) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        super(context, BASE_DATABASE_NAME + UserData.getInstance("").getHashUsername() + ".db", null, DATABASE_VERSION);
     }
 
 

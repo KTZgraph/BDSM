@@ -12,8 +12,11 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
 public class MainActivity extends Activity {
-    DatabaseHelper db;
+    UserDatabase db;
 
     EditText textUsername;
     EditText textUserPassword;
@@ -26,7 +29,7 @@ public class MainActivity extends Activity {
         // REJESTRACJA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); //widok rejestracji uzytkownika
-        db = new DatabaseHelper(this);
+        db = new UserDatabase(this);
 
         textUsername = (EditText) findViewById(R.id.textUsername);
         textUserPassword = (EditText) findViewById(R.id.textUserPassword);
@@ -46,14 +49,28 @@ public class MainActivity extends Activity {
                 }
                 else{
                     if (rawPassword.equals(rawPasswordConfirmation)){ // podane hasła identyczne sprawdzam same stringi nie hashe
-                        if(db.checkUsername(username) == true){ // login wolny
+                        boolean checUsernameStatus = false;
+                        try {
+                            checUsernameStatus = db.checkUsername(username);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        if( checUsernameStatus== true){ // login wolny
                             // TODO wymuśić mocne hasla na użytkowniku
-                            Boolean registerStatus = db.register(username, rawPassword);
+                            Boolean registerStatus = null;
+
+                            try {
+                                registerStatus = db.register(username, rawPassword);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                             if (registerStatus == true){
                                 Toast.makeText(getApplicationContext(), "Rejestracja powiodła się", Toast.LENGTH_SHORT).show();
                                 Log.i("Register", "Registered successfully");
-                                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                                startActivity(loginIntent);
+//                                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+//                                startActivity(loginIntent);
                             }
                         }else{
                             //nieprawidłowa rejestracja
