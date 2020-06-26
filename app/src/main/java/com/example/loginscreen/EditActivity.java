@@ -30,6 +30,7 @@ public class EditActivity extends AppCompatActivity {
     String todaysDate;
     String currentTime;
     String rawTmpPassword = "Bar12345Bar12345";
+    String rawNewPassword = "Bar12345Bar12345";
 
 
 
@@ -52,13 +53,11 @@ public class EditActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.heart_back);
         setSupportActionBar(toolbar);
-//        getSupportActionBar().setTitle(note.getPasswordAES());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         noteTitle = findViewById(R.id.notePassword);
         noteDetails = findViewById(R.id.noteContent);
 
-//        noteTitle.setText(note.getPasswordAES());
         noteDetails.setText(note.getPlainText(this.rawTmpPassword));
         noteDetails.setMovementMethod(new ScrollingMovementMethod());
 
@@ -123,6 +122,7 @@ public class EditActivity extends AppCompatActivity {
             int id = db.editNote(note);
             if(id >= 0){
                 Toast.makeText(this, "Notatka zaktualizowana", Toast.LENGTH_SHORT).show();
+
             }else{
                 Toast.makeText(this, "Błąd aktualizacji!", Toast.LENGTH_SHORT).show();
             }
@@ -130,6 +130,7 @@ public class EditActivity extends AppCompatActivity {
             // refresh danych
             Intent intentDetailsActivity = new Intent(getApplicationContext(), DetailsActivity.class);
             intentDetailsActivity.putExtra("noteID", note.getID());
+            intentDetailsActivity.putExtra("noteRawPassword", rawNewPassword);
             startActivity(intentDetailsActivity);
         }
 
