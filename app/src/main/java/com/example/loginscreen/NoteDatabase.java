@@ -6,11 +6,15 @@ import android.util.Log;
 
 
 // ----------------- zamiana importów na umożliwienie szyfrowania bazy danych
-import net.sqlcipher.Cursor;
-import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteDatabaseHook;
-import net.sqlcipher.database.SQLiteOpenHelper;
+//import net.sqlcipher.Cursor;
+//import net.sqlcipher.database.SQLiteDatabase;
+//import net.sqlcipher.database.SQLiteDatabaseHook;
+//import net.sqlcipher.database.SQLiteOpenHelper;
 
+// ------------- bez szyfrowania
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -51,7 +55,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
         }return instance;
     }
 
-    private static SQLiteDatabaseHook hook = new SQLiteDatabaseHook(){
+    /*
+    private static SQLiteDatabaseHook hook = new SQLiteDatabaseHook(){ // TODO  PASS_PHARSE HOOK
         public void preKey(SQLiteDatabase database){
             database.rawExecSQL("PRAGMA kdf_iter = 64000;");
 //            database.rawExecSQL("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;");
@@ -61,6 +66,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         public void postKey(SQLiteDatabase database){}
     };
 
+    */
 
     public NoteDatabase(Context context) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         super(context, BASE_DATABASE_NAME + UserData.getInstance("").getHashUsername() + ".db", null, DATABASE_VERSION);
@@ -94,7 +100,9 @@ public class NoteDatabase extends SQLiteOpenHelper {
     }
 
     public long addNote(Note note){
-        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE);
+        //SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE); //szyfrowanie
+
+        SQLiteDatabase db = instance.getWritableDatabase(); // TODO  PASS_PHARSE
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_TIME, note.getTime());
@@ -114,7 +122,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
         // ROZSZYFROWUJĘ DOPIERO W ACTIVITY
         //pobieranie pojedynczej notatki
         // "=?" zapobiega SQLInjection
-        SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE);
+        SQLiteDatabase db = instance.getReadableDatabase(); // TODO  PASS_PHARSE
+//        SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE);
         String query = "SELECT * from ";
         Cursor cursor = db.query(DATABASE_TABLE,
                 new String[]{
@@ -154,7 +163,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
     }
 
     public List<Note> getAllNotes(){
-        SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE);
+        SQLiteDatabase db = instance.getReadableDatabase(); // TODO  PASS_PHARSE
+//        SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE);
         List<Note> allNotes = new ArrayList<>();
         // wybieranie wszystkich danych z bazy
 
@@ -190,7 +200,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
     }
 
     public int editNote(Note note){
-        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE);
+//        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE);
+        SQLiteDatabase db = instance.getWritableDatabase(); // TODO  PASS_PHARSE
         ContentValues contentValues = new ContentValues();
         Log.d("EDITED DB", "Edited password -> " + note.getSecret() + "\n ID ->" + note.getID());
         contentValues.put(KEY_DATE, note.getDate());
@@ -208,7 +219,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
 
     void deleteNote(long id){
-        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE);
+//        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE);// TODO  PASS_PHARSE
+        SQLiteDatabase db = instance.getWritableDatabase();
         db.delete(DATABASE_TABLE, KEY_ID+"=?", new String[] {String.valueOf(id)});
         db.close();
     }

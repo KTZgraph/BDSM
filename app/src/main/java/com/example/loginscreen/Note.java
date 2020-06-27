@@ -171,7 +171,14 @@ public class Note {
         try
         {
             byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            IvParameterSpec ivspec = new IvParameterSpec(iv);
+
+            // https://medium.com/@nipun.357/aes-encryption-decryption-java-python-6e9f261c24d6 generowanie losowego IV
+            // Generating random IV
+            byte[] ivCode = new byte[16];
+            SecureRandom random = new SecureRandom();
+            random.nextBytes(ivCode);
+
+            IvParameterSpec ivspec = new IvParameterSpec(ivCode);
             setIv(ivspec.getIV()); //zapisuje iv
 
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
@@ -198,8 +205,8 @@ public class Note {
         // Padding http://www.herongyang.com/Cryptography/DES-JDK-What-Is-PKCS5Padding.html
         try
         {
-            byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            IvParameterSpec ivspec = new IvParameterSpec(iv);
+             // pobiera Iv z bazy
+            IvParameterSpec ivspec = new IvParameterSpec(getIv());
 
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             KeySpec spec = new PBEKeySpec(rawPassword.toCharArray(), getSalt(), 65536, 256);

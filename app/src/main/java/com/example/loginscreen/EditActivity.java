@@ -125,13 +125,13 @@ public class EditActivity extends AppCompatActivity {
 
             }else{
                 Toast.makeText(this, "Błąd aktualizacji!", Toast.LENGTH_SHORT).show();
+                Intent intentDetailsActivity = new Intent(getApplicationContext(), DetailsActivity.class);
+            intentDetailsActivity.putExtra("noteID", note.getID());
+            startActivity(intentDetailsActivity);
             }
 
-            // refresh danych
-            Intent intentDetailsActivity = new Intent(getApplicationContext(), DetailsActivity.class);
-            intentDetailsActivity.putExtra("noteID", note.getID());
-            intentDetailsActivity.putExtra("noteRawPassword", rawNewPassword);
-            startActivity(intentDetailsActivity);
+            goToParentActivity(); // zamaist refreszu po prostu wracam do listy dnotatek
+            // bo inaczej user i tak musiałby wpisac hasło na nowo
         }
 
         return super.onOptionsItemSelected(item);
