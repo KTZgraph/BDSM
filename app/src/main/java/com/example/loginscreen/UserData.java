@@ -1,7 +1,5 @@
 package com.example.loginscreen;
 
-import android.util.Base64;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,7 +13,7 @@ public class UserData {
     private String hashUsername;
 
     private  UserData(String rawUsername) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        this.hashUsername = SHA1(rawUsername);
+        this.hashUsername = SHA_512(rawUsername);
         // TODO usuwać wartośc jak użytkownik się wylogowuje !!!!!!!!!!!!!!!!
     }
 
@@ -34,13 +32,16 @@ public class UserData {
         return hashUsername;
     }
 
-    public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        String result;
-        MessageDigest md = MessageDigest.getInstance("SHA-1");
-        md.update(text.getBytes("iso-8859-1"), 0, text.length());
-        byte[] sha1hash = md.digest();
-        result = Base64.encodeToString(sha1hash, Base64.DEFAULT);
-        result = result.substring(0, result.length()-1);
-        return result;
+    public static String SHA_512(String originalString) throws NoSuchAlgorithmException {
+        //https://developer.android.com/reference/java/security/MessageDigest
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalArgumentException(e);
+        }
+        byte[] result = md.digest(originalString.getBytes());
+        return result.toString();
     }
+
 }
