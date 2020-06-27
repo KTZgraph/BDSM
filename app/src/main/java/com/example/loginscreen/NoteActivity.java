@@ -33,7 +33,7 @@ public class NoteActivity extends AppCompatActivity {
 
         Log.i("NoteActivity", "przejscie do widoku notatek");
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.heart_back); // TODO TODO TODO
+        toolbar.setNavigationIcon(R.drawable.heart_back);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Wszystkie Notatki");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
