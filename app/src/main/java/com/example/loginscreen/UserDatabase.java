@@ -66,6 +66,58 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     }
 
+    public boolean update(String rawOldPassword, String rawNewPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        userData = UserData.getInstance(""); // inicjalizacja danych użytkownika
+
+        // sprawdzanie czy stare haslo jest dobre
+        SQLiteDatabase db = this.getReadableDatabase();
+        // =? zabezpiecza przed SQLi bo caloś traktowana jak string
+        Cursor cursor = db.rawQuery("SELECT password FROM user WHERE username=?", new String[]{userData.getHashUsername()});
+        Log.i("DBHelper", "Kolumny: " + cursor.getColumnNames());
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            String hashPassword = cursor.getString(cursor.getColumnIndex("password"));
+
+            if(hashPassword.isEmpty() || rawOldPassword.isEmpty()) return false;
+
+            Log.i("UserDatabase", "bcrypt sie zaczyna");
+            // dokladnie to samo co https://www.codota.com/code/java/packages/at.favre.lib.crypto.bcrypt
+            BCrypt.Result result = BCrypt.verifyer().verify(rawOldPassword.toCharArray(), hashPassword);
+            Log.i("result", "RESULT: " + result.verified);
+            if (result.verified==true) {
+                System.out.println(" It matches");
+                Log.i("haslo baza",  "Stare haslo pasuje");
+            } else {
+                System.out.println(" It does not match");
+                Log.i("haslo baza",  "Stare haslo nie pasuje ");
+                return false;
+            }
+        }else {
+            Log.i("result", "BCRYPT UMAR");
+            return false;
+        }
+
+        //aktualizacja nowego hasla
+        db = this.getWritableDatabase();
+        String newBcryptHashString = "";
+        try {
+            newBcryptHashString = BCrypt.withDefaults().hashToString(12, rawNewPassword.toCharArray()); //surowe hasło do bcrypta
+            Log.i("bcryptHashString", newBcryptHashString);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.i("e", e.toString());
+        }
+
+        // moge kleic strina i tak to tylko hash a mam zabezpieczenie przed SQLi w postaci =?
+        cursor = db.rawQuery("UPDATE user SET password=? WHERE username=?", new String[]{ newBcryptHashString, userData.getHashUsername()});
+        if (cursor.getCount()> 0) return false;
+        else return  true;
+
+    }
+
+
     public boolean checkUsername(String rawUsername) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         // sprawdzam czy użytkownik już istnieje w bazie; tylko odczyt
         SQLiteDatabase db = this.getReadableDatabase();

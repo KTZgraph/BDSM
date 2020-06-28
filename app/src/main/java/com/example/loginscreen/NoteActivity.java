@@ -74,9 +74,14 @@ public class NoteActivity extends AppCompatActivity {
             Toast.makeText(this, "ADD btn is Clicked", Toast.LENGTH_SHORT).show();
             Intent addNoteIntent = new Intent(this, AddNote.class);
             startActivity(addNoteIntent);
-
             Log.i("onOptionsItemSelected", "item.getItemId()");
-
+        }
+        if (item.getItemId() == R.id.editDatabasePassword){
+            // zmiana hasla do bazy SQLiteCipher
+            Toast.makeText(this, "Zmiana hasla zarejestrowanego uzytkownika", Toast.LENGTH_SHORT).show();
+            Intent changeUserPassword = new Intent(this, ChangeUserPassword.class);
+            startActivity(changeUserPassword);
+            Log.i("onOptionsItemSelected", "Zmiana hasla zarejestrowanego uzytkownika");
         }
         return super.onOptionsItemSelected(item);
     }

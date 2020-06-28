@@ -9,6 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".ChangeUserPassword">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.loginscreen.NoteActivity" />
+        </activity>
         <activity
             android:name=".DetailsActivity"
             android:label="@string/title_activity_details"

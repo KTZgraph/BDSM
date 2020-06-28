@@ -5,8 +5,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -17,8 +15,6 @@ import android.widget.Toast;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 
 public class EditActivity extends AppCompatActivity {
@@ -64,8 +60,8 @@ public class EditActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Edycja");
 
 
-        noteRawNewPassword = findViewById(R.id.noteRawNewPassword);
-        noteRawNewPasswordConfirm = findViewById(R.id.noteRawNewPasswordConfirm);
+        noteRawNewPassword = findViewById(R.id.rawNewUserpassword);
+        noteRawNewPasswordConfirm = findViewById(R.id.rawNewUserpasswordConfirm);
         noteDetails = findViewById(R.id.rawNoteContent);
 
 
