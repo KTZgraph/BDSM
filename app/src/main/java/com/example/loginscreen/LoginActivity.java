@@ -36,12 +36,12 @@ public class LoginActivity extends Activity {
         cardViewLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = textUsername.getText().toString();
+                String rawUsername = textUsername.getText().toString();
                 String rawPassword = textUserPassword.getText().toString();
 
                 Boolean loginStatus = false;
                 try {
-                    loginStatus = db.login(username, rawPassword);
+                    loginStatus = db.login(rawUsername, rawPassword);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -50,11 +50,13 @@ public class LoginActivity extends Activity {
                 Log.i("LOGIN", "wartosc: " + loginStatus);
                 if (loginStatus == true) {
                     Toast.makeText(getApplicationContext(), "Zalgowano pomyślnie", Toast.LENGTH_SHORT).show();
+                    Log.i("Login", "Zalgowano pomyślnie: " + rawUsername);
+
                     Intent noteIntent = new Intent(LoginActivity.this, NoteActivity.class);
                     startActivity(noteIntent);
                 } else
                     Toast.makeText(getApplicationContext(), "Nieprawidłowy login lub hasło", Toast.LENGTH_SHORT).show();
-                    Log.i("Login", "Login error for user: " + username);
+                    Log.i("Login", "Login error for user: " + rawUsername);
             }
         });
 

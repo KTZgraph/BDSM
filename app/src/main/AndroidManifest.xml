@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".CipherActivity"></activity>
         <activity
             android:name=".DetailsActivity"
             android:label="@string/title_activity_details"

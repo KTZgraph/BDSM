@@ -108,7 +108,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         contentValues.put(KEY_TIME, note.getTime());
         contentValues.put(KEY_DATE, note.getDate());
         contentValues.put(KEY_CIPHERTEXT, note.getCiphertext());
-        contentValues.put(KEY_SECRET, note.getSecret().toString());
+        contentValues.put(KEY_SECRET, note.setSecretPBKDF2Key().toString());
         contentValues.put(KEY_SALT, note.getSalt());
         contentValues.put(KEY_IV, note.getIv());
 
@@ -150,7 +150,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         note.setCiphertext(cursor.getString(cursor.getColumnIndex(KEY_CIPHERTEXT)));
 
         // hasło aes
-        note.setSecret(cursor.getString(cursor.getColumnIndex(KEY_SECRET)));
+        note.setSecretPBKDF2Key(cursor.getString(cursor.getColumnIndex(KEY_SECRET)));
 
         // sól
         note.setSalt(cursor.getBlob(cursor.getColumnIndex(KEY_SALT)));
@@ -181,7 +181,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
                 note.setCiphertext(cursor.getString(cursor.getColumnIndex(KEY_CIPHERTEXT)));
 
                 // hasło aes
-                note.setSecret(cursor.getString(cursor.getColumnIndex(KEY_SECRET)));
+                note.setSecretPBKDF2Key(cursor.getString(cursor.getColumnIndex(KEY_SECRET)));
 
                 // sól
 //                note.setSalt(cursor.getString(cursor.getColumnIndex(KEY_SALT)));
@@ -203,12 +203,12 @@ public class NoteDatabase extends SQLiteOpenHelper {
 //        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE);
         SQLiteDatabase db = instance.getWritableDatabase(); // TODO  PASS_PHARSE
         ContentValues contentValues = new ContentValues();
-        Log.d("EDITED DB", "Edited password -> " + note.getSecret() + "\n ID ->" + note.getID());
+        Log.d("EDITED DB", "Edited password -> " + note.setSecretPBKDF2Key() + "\n ID ->" + note.getID());
         contentValues.put(KEY_DATE, note.getDate());
         contentValues.put(KEY_TIME, note.getTime());
 
         contentValues.put(KEY_CIPHERTEXT, note.getCiphertext());
-        contentValues.put(KEY_SECRET, note.getSecret());
+        contentValues.put(KEY_SECRET, note.setSecretPBKDF2Key());
         contentValues.put(KEY_SALT, note.getSalt());
         contentValues.put(KEY_IV, note.getIv());
 

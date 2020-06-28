@@ -18,7 +18,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <EditText
-        android:id="@+id/notePassword"
+        android:id="@+id/oldRawNotePassword"
         android:layout_width="345dp"
         android:layout_height="46dp"
         android:layout_marginStart="16dp"
@@ -26,16 +26,16 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:ems="10"
-        android:hint="Stare Hasło"
         android:background="#CCFFFFFF"
+        android:ems="10"
+        android:hint="Aktualne Hasło "
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <EditText
-        android:id="@+id/noteNewPassword"
+        android:id="@+id/noteRawNewPassword"
         android:layout_width="345dp"
         android:layout_height="46dp"
         android:layout_marginStart="16dp"
@@ -49,10 +49,10 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notePassword" />
+        app:layout_constraintTop_toBottomOf="@+id/oldRawNotePassword" />
 
     <EditText
-        android:id="@+id/noteNewPasswordConfirm"
+        android:id="@+id/noteRawNewPasswordConfirm"
         android:layout_width="345dp"
         android:layout_height="46dp"
         android:layout_marginStart="16dp"
@@ -66,10 +66,10 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteNewPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/noteRawNewPassword" />
 
     <EditText
-        android:id="@+id/noteContent"
+        android:id="@+id/rawNoteContent"
         android:layout_width="343dp"
         android:layout_height="590dp"
         android:layout_marginStart="16dp"
@@ -85,6 +85,6 @@
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteNewPasswordConfirm" />
+        app:layout_constraintTop_toBottomOf="@+id/noteRawNewPasswordConfirm" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

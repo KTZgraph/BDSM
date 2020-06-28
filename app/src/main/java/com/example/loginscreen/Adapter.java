@@ -18,9 +18,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     LayoutInflater inflater;
     List<Note> allNotes;
 
-    String rawTmpPassword = "Bar12345Bar12345";
-
-
     Adapter(Context context, List<Note> allNotes){
         this.inflater = LayoutInflater.from(context);
         this.allNotes = allNotes;
@@ -56,8 +53,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            noteRawPassword = itemView.findViewById(R.id.notePassword);
-            // TODO: sprawdzanie czy user podał dobre haslo
+            noteRawPassword = itemView.findViewById(R.id.oldRawNotePassword);
+            // TODO: sprawdzanie czy user podał dobre haslo; w sumie to ze zlym haselm nie rozszyfruje wiec na razie sie nie przjmuje
             noteDate = itemView.findViewById(R.id.noteDate);
             noteTime = itemView.findViewById(R.id.noteTime);
 
@@ -66,8 +63,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 public void onClick(View v) {
                     Intent intentDetailsActivity = new Intent(v.getContext(), DetailsActivity.class);
                     intentDetailsActivity.putExtra("noteID",allNotes.get(getAdapterPosition()).getID());
-//                    intentDetailsActivity.putExtra("noteRawPassword", noteRawPassword.getText().toString()); // TODO przekazanie hasła z notatki
-                    intentDetailsActivity.putExtra("noteRawPassword", rawTmpPassword); // TODO przekazanie hasła z notatki
+                    intentDetailsActivity.putExtra("noteRawPassword", noteRawPassword.getText().toString()); // TODO przekazanie hasła z notatki
                     v.getContext().startActivity(intentDetailsActivity);
                 }
             });

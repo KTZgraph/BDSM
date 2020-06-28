@@ -39,7 +39,7 @@ public class NoteActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        NoteDatabase db = null; // TODO tutaj problemy
+        NoteDatabase db = null;
 
         try {
             db = NoteDatabase.getInstance(NoteActivity.this);

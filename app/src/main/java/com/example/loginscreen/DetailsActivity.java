@@ -17,13 +17,12 @@ import android.widget.Toast;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 
 public class DetailsActivity extends AppCompatActivity {
     NoteDatabase db;
     TextView detailsOfNote;
     Note note;
+    private String noteRawPassword; // musze przekazac do edycji
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         Intent intentDetailsActivity = getIntent();
         Long id = intentDetailsActivity.getLongExtra("noteID", 0);
-        String noteRawPassword = intentDetailsActivity.getStringExtra("noteRawPassword"); //TODO
+        this.noteRawPassword = intentDetailsActivity.getStringExtra("noteRawPassword");
 
         try {
             db = NoteDatabase.getInstance(DetailsActivity.this);
@@ -50,9 +49,15 @@ public class DetailsActivity extends AppCompatActivity {
         note = db.getNote(id);
 
         getSupportActionBar().setTitle(note.getDate());
-        detailsOfNote.setText(note.getPlainText(noteRawPassword)); // TODO
+        String notePlaintText = note.getPlainText(this.noteRawPassword); //zrobione
+        if (notePlaintText == null){
+            Toast.makeText(this, "BLAD Podano nieprawidlowe haslo dla notatki", Toast.LENGTH_SHORT).show();
+            // jak zle haslo to powrot do listy notatek
+            startActivity(new Intent(getApplicationContext(), NoteActivity.class)); //przekirowanie do głownego activity
+        }
+        detailsOfNote.setText(notePlaintText);
 
-        Toast.makeText(this, "DetailsActivity -> " + note.getPlainText(noteRawPassword), Toast.LENGTH_SHORT).show(); //TODO
+        Toast.makeText(this, "DetailsActivity -> ", Toast.LENGTH_SHORT).show(); //TODO
         FloatingActionButton fab = findViewById(R.id.deleteButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +85,8 @@ public class DetailsActivity extends AppCompatActivity {
             Toast.makeText(this, "Edit note", Toast.LENGTH_SHORT).show();
             Intent intentEditNote = new Intent(this, EditActivity.class);
             intentEditNote.putExtra("noteID", note.getID());
+            intentEditNote.putExtra("rawPassword",this.noteRawPassword);
+            this.noteRawPassword = null; //zerowanie hasla po podaniu do nowego widoku
             startActivity(intentEditNote);
         }
 

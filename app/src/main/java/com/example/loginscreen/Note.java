@@ -14,7 +14,6 @@ import java.security.spec.KeySpec;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -27,13 +26,25 @@ public class Note {
     private String date;
     private String time;
     private String ciphertext;
-    private SecretKey secretKey;
+    private SecretKey secretPBKDF2Key; //powinien byc PBKDF2WithHmacSHA256 bo jest z sola i w ogole
     private byte[] salt;
     private byte[] iv;
+    private int iterationCountPBKDF2WithHmacSHA256 = 64000; // Powinno byc 256000; ale wtedy emulator umiera :<
 
-    Cipher ecipher;
-    Cipher dcipher;
-    int iterationCount = 19;
+            /*https://crypto.stackexchange.com/questions/3484/pbkdf2-and-salt
+            First, realize that PBKDF2 is PKCS #5 is RFC 2898, i.e. http://www.ietf.org/rfc/rfc2898.txt
+
+            It's essentially an algorithm to securely hash a password as many times as you want, with whatever hash you want.
+            OWASP recommends hashing the password at least 64,000 times in 2012, and doubling that every two years, per https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet
+            https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+            2020 - 2012 = 8
+            8/ 2 = 4
+            4 * 64 000 =  256 000‬
+             */
+
+
+
+
 
 
     Note(){}
@@ -53,14 +64,13 @@ public class Note {
         this.ciphertext = encrypt(rawPassword, content); //szyfruje tresc notatki
     }
 
-    public void update(String newRawPassword, String OldRawPassword, String newContent) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+    public void update(String newRawPassword, String OldRawPassword, String rawNewContent) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         if (newRawPassword.isEmpty()){
-            this.ciphertext = encrypt(OldRawPassword, newContent);
+            this.ciphertext = encrypt(OldRawPassword, rawNewContent);
 
         }else{
             this.salt = generateSalt();
-            setSecret(newRawPassword);
-            this.ciphertext = encrypt(newRawPassword, newContent);
+            this.ciphertext = encrypt(newRawPassword, rawNewContent);
         }
     }
 
@@ -88,33 +98,24 @@ public class Note {
         this.time = time;
     }
 
-    public String getSecret() {
+    public String setSecretPBKDF2Key() {
         // zwracam Stringa latwiej ze wzgldu na DB
         // https://stackoverflow.com/questions/5355466/converting-secret-key-into-a-string-and-vice-versa
-        String stringKey;
 
-        try {secretKey = KeyGenerator.getInstance("AES").generateKey();}
-        catch (NoSuchAlgorithmException e) {/* LOG YOUR EXCEPTION */}
-
-        if (secretKey != null) {
-            stringKey = Base64.encodeToString(secretKey.getEncoded(), Base64.DEFAULT);
-            return stringKey;
+        if (secretPBKDF2Key != null) { //POROWNUJE MOJ KLUCZ Z BAZY
+            return  Base64.encodeToString(secretPBKDF2Key.getEncoded(), Base64.DEFAULT);
         }
         return "Jakis babol w luczach";
     }
 
 
-    public void setSecret(String stringKey) {
+    public void setSecretPBKDF2Key(String stringKey) {
         // ustawiam klucz ze stringa - latwiej ze wzgldu na DB
         byte[] encodedKey     = Base64.decode(stringKey, Base64.DEFAULT);
         SecretKey originalKey = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
-        this.secretKey = originalKey;
+        this.secretPBKDF2Key = originalKey;
     }
-
-
-    public void setSecret(SecretKeySpec secretKey) {
-        this.secretKey = secretKey;
-    }
+    
 
     public byte[] getSalt() {
         return salt;
@@ -142,7 +143,8 @@ public class Note {
 
     public String  getPlainText(String rawPassword){
         try{
-            return decrypt(rawPassword, getCiphertext());
+            String rawContent = decrypt(rawPassword, getCiphertext());
+                return rawContent;
 
         }catch (Exception e){
             System.out.println(e.toString());
@@ -159,19 +161,33 @@ public class Note {
         return salt;
     }
 
+    private Boolean checkOldPassword(String rawOldPassword) throws NoSuchAlgorithmException, InvalidKeySpecException { // TODO
+//        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+//        KeySpec spec = new PBEKeySpec(rawOldPassword.toCharArray(), getSalt(), 65536, 256);
+//        SecretKey tmp = factory.generateSecret(spec);
+//        SecretKeySpec secretPBKDF2Key = new SecretKeySpec(tmp.getEncoded(), "AES");
+
+        return true;
+    }
 
     //https://howtodoinjava.com/security/aes-256-encryption-decryption/
-    public String encrypt(String rawPassword, String strToEncrypt)
+    private String encrypt(String rawPassword, String strToEncrypt)
     {
         /*Java program to encrypt a password (or any information) using AES 256 bits.
 
         Po co w ogóle iv
         https://stackoverflow.com/questions/31132162/what-size-of-initialization-vector-needed-for-aes-256-encryption-in-java/31147653#31147653
+
+
+        https://crypto.stackexchange.com/questions/3484/pbkdf2-and-salt
+            First, realize that PBKDF2 is PKCS #5 is RFC 2898, i.e. http://www.ietf.org/rfc/rfc2898.txt
+
+            It's essentially an algorithm to securely hash a password as many times as you want, with whatever hash you want.
+            OWASP recommends hashing the password at least 64,000 times in 2012, and doubling that every two years, per https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet
+            https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
         */
         try
         {
-            byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
             // https://medium.com/@nipun.357/aes-encryption-decryption-java-python-6e9f261c24d6 generowanie losowego IV
             // Generating random IV
             byte[] ivCode = new byte[16];
@@ -182,11 +198,12 @@ public class Note {
             setIv(ivspec.getIV()); //zapisuje iv
 
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            KeySpec spec = new PBEKeySpec(rawPassword.toCharArray(), getSalt(), 65536, 256);
+            KeySpec spec = new PBEKeySpec(rawPassword.toCharArray(), getSalt(), this.iterationCountPBKDF2WithHmacSHA256, 256);
+            setSecretPBKDF2Key(spec.toString()); // przechowuje jako string bo baza ogarnia
+
             SecretKey tmp = factory.generateSecret(spec);
             SecretKeySpec secretKey = new SecretKeySpec(tmp.getEncoded(), "AES");
 
-            setSecret(secretKey);
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); //tu mozna tryby zmienic o fajnie
             // który padding wybrać o.Ó ?
@@ -201,7 +218,7 @@ public class Note {
         return null;
     }
 
-    public String decrypt(String rawPassword, String strToDecrypt) {
+    private String decrypt(String rawPassword, String strToDecrypt) {
         // Padding http://www.herongyang.com/Cryptography/DES-JDK-What-Is-PKCS5Padding.html
         try
         {
@@ -209,7 +226,18 @@ public class Note {
             IvParameterSpec ivspec = new IvParameterSpec(getIv());
 
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            KeySpec spec = new PBEKeySpec(rawPassword.toCharArray(), getSalt(), 65536, 256);
+            /*
+            https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+            PBKDF2 can be used with HMACs based on a number of different hashing algorithms. HMAC-SHA-256 is widely supported and is recommended by NIST.
+            The work factor for PBKDF2 is implemented through the iteration count, which should be at least 10,000 (although values of up to 100,000 may be appropriate in higher security environments).
+
+
+             Argon2id
+            Argon2 is the winner of the 2015 Password Hashing Competition. There are three different versions of the algorithm, and the Argon2id variant should be used where available, as it provides a balanced approach to resisting both side channel and GPU-based attacks.
+               [!] Wow ten algrytm wygral, ale jest 4:45 to olewam YOLO :D
+
+             */
+            KeySpec spec = new PBEKeySpec(rawPassword.toCharArray(), getSalt(), this.iterationCountPBKDF2WithHmacSHA256, 256);
             SecretKey tmp = factory.generateSecret(spec);
             SecretKeySpec secretKey = new SecretKeySpec(tmp.getEncoded(), "AES");
 
@@ -220,7 +248,7 @@ public class Note {
         }
         catch (Exception e) {
             System.out.println("Error while decrypting: " + e.toString());
+            return null;
         }
-        return null;
     }
 }

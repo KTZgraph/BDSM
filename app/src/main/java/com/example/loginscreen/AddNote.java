@@ -21,13 +21,11 @@ import java.util.Calendar;
 public class AddNote extends AppCompatActivity {
     Toolbar toolbar;
     EditText rawPassword;
-    EditText noteContent;
+    EditText rawNoteContent;
     Calendar calendar;
     String todaysDate;
     String currentTime;
 
-
-    String rawTmpPassword = "Bar12345Bar12345";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +42,10 @@ public class AddNote extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        rawPassword = findViewById(R.id.notePassword);
-        noteContent = findViewById(R.id.noteContent);
+        rawPassword = findViewById(R.id.oldRawNotePassword);
+        rawNoteContent = findViewById(R.id.rawNoteContent);
 
-        noteContent.addTextChangedListener(new TextWatcher() {
+        rawNoteContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -56,7 +54,7 @@ public class AddNote extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length() != 0 || s.equals("") || s.equals(" ")){
-                    getSupportActionBar().setTitle(s);
+                    getSupportActionBar().setTitle(s); //ustawianie tytulu na belce
                 }
             }
 
@@ -97,8 +95,7 @@ public class AddNote extends AppCompatActivity {
             // Tworzenie nowej notatki
             Note note;
             try {
-//                note = new Note(rawPassword.getText().toString(), noteContent.getText().toString(), todaysDate, currentTime);
-                note = new Note(rawTmpPassword, noteContent.getText().toString(), todaysDate, currentTime);
+                note = new Note(rawPassword.getText().toString(), rawNoteContent.getText().toString(), todaysDate, currentTime); //TODO
                 NoteDatabase db = NoteDatabase.getInstance(AddNote.this);
                 db.addNote(note);
                 Toast.makeText(this, "Notatka zapisana", Toast.LENGTH_SHORT).show();
