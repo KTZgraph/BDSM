@@ -68,7 +68,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
 
     public NoteDatabase(Context context) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        super(context, BASE_DATABASE_NAME + UserData.getInstance("").getHashUsername() + ".db", null, DATABASE_VERSION);
+        super(context, BASE_DATABASE_NAME + UserData.getInstance().getHashUsername() + ".db", null, DATABASE_VERSION);
     }
 
 
@@ -100,7 +100,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
     public long addNote(Note note) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         //SQLiteDatabase db = instance.getWritableDatabase(); //szyfrowanie
 
-        String PASS_PHARSE = UserData.getInstance("").getDatabaseRawPassword();
+        String PASS_PHARSE = UserData.getInstance().getDatabaseRawPassword();
         SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE); // TODO  PASS_PHARSE
 
         ContentValues contentValues = new ContentValues();
@@ -120,7 +120,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         // ROZSZYFROWUJĘ DOPIERO W ACTIVITY
         //pobieranie pojedynczej notatki
         // "=?" zapobiega SQLInjection
-        String PASS_PHARSE = UserData.getInstance("").getDatabaseRawPassword();
+        String PASS_PHARSE = UserData.getInstance().getDatabaseRawPassword();
         SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE); // TODO  PASS_PHARSE
 //        SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE);
         String query = "SELECT * from ";
@@ -160,7 +160,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
     public List<Note> getAllNotes() throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
-        String PASS_PHARSE = UserData.getInstance("").getDatabaseRawPassword();
+        String PASS_PHARSE = UserData.getInstance().getDatabaseRawPassword();
         SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE); // TODO  PASS_PHARSE
 //        SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE);
         List<Note> allNotes = new ArrayList<>();
@@ -197,7 +197,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
     public int editNote(Note note) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 //        SQLiteDatabase db = instance.getWritableDatabase();
 
-        String PASS_PHARSE = UserData.getInstance("").getDatabaseRawPassword();
+        String PASS_PHARSE = UserData.getInstance().getDatabaseRawPassword();
         SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE); // TODO  PASS_PHARSE
         ContentValues contentValues = new ContentValues();
         Log.d("EDITED DB", "Edited password -> nowa sol i iv "+ "\n ID ->" + note.getID());
@@ -216,7 +216,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
     void deleteNote(long id) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 //        SQLiteDatabase db = instance.getWritableDatabase();// TODO  PASS_PHARSE
-        String PASS_PHARSE = UserData.getInstance("").getDatabaseRawPassword();
+        String PASS_PHARSE = UserData.getInstance().getDatabaseRawPassword();
         SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE); // TODO  PASS_PHARSE
         db.delete(DATABASE_TABLE, KEY_ID+"=?", new String[] {String.valueOf(id)});
         db.close();

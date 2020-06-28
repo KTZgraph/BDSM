@@ -37,7 +37,10 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     //
     public boolean register(String rawUsername, String rawPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        userData = UserData.getInstance(rawUsername); // inicjalizacja danych użytkownika
+        // TODO tutaj są dane dla nowej bazy; widok sie tym nie zajmuje
+        userData = UserData.getInstance(); // inicjalizacja danych użytkownika
+        userData.setHashUsername(rawUsername);
+        userData.setDatabaseRawPassword(rawPassword);
         // z tymi danymi powinna się robić nowa baza danych
         // TODO nowa baza danych notatek
 
@@ -59,6 +62,10 @@ public class UserDatabase extends SQLiteOpenHelper {
         contentValues.put("username", userData.getHashUsername());
         contentValues.put("password", bcryptHashString); // zaszyfrowane bcryptem
 
+        // usuwam dane o uzytkowniku NIEIEIEEIEIEI
+//        userData.setHashUsername("");
+//        userData.setDatabaseRawPassword("");
+
         long insertStatus = db.insert("user", null,  contentValues);
 
         if (insertStatus >= 0)return true;
@@ -66,8 +73,9 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     }
 
+    // Tej metody nie robie dzisiaj juz -,-
     public boolean update(String rawOldPassword, String rawNewPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        userData = UserData.getInstance(""); // inicjalizacja danych użytkownika
+        userData = UserData.getInstance(); // inicjalizacja danych użytkownika
 
         // sprawdzanie czy stare haslo jest dobre
         SQLiteDatabase db = this.getReadableDatabase();
@@ -121,7 +129,9 @@ public class UserDatabase extends SQLiteOpenHelper {
     public boolean checkUsername(String rawUsername) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         // sprawdzam czy użytkownik już istnieje w bazie; tylko odczyt
         SQLiteDatabase db = this.getReadableDatabase();
-        userData = UserData.getInstance(rawUsername); // inicjalizacja danych użytkownika
+        // musze dodac najpeirw hasha do obietky // TODO !!!!!!!!!!!!!!!!!!!
+        UserData userData  = UserData.getInstance(); // juz nie bedzie nulla
+        userData.setHashUsername(rawUsername);
 
 
         // =? zabezpiecza przed SQLi bo caloś traktowana jak string
@@ -133,9 +143,11 @@ public class UserDatabase extends SQLiteOpenHelper {
     //sprawdzanie loginu i hasła
     public Boolean login(String rawUsername, String rawPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         SQLiteDatabase db = this.getReadableDatabase();
-        userData = UserData.getInstance(rawUsername);
-        UserData.getInstance(rawUsername).setDatabaseRawPassword(rawPassword); // haslo do drugiej bazy musi byc surowe
-        // cos ten obiekt ma jak dane sesyjne; bieda autoryzacja
+        // TODO - tutaj zapisuje dane o userze !!!!!!!!!!!!
+        userData = UserData.getInstance();
+        userData.setHashUsername(rawUsername);
+        userData.setDatabaseRawPassword(rawPassword); // haslo do drugiej bazy musi byc surowe
+        // cos ten obiekt ma jak dane sesyjne; biedna autoryzacja
 
 
         // =? zabezpiecza przed SQLi bo caloś traktowana jak string

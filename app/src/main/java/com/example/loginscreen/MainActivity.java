@@ -41,6 +41,12 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String rawUsername = textUsername.getText().toString();
+                try {
+                    UserData userData = UserData.getInstance();
+                    userData.setHashUsername(rawUsername);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 String rawPassword = textUserPassword.getText().toString();
                 String rawPasswordConfirmation = textUserPasswordConfirmation.getText().toString();
 
@@ -51,7 +57,7 @@ public class MainActivity extends Activity {
                     // jezeli nie puste
                     if (rawPassword.equals(rawPasswordConfirmation)){ // podane hasła identyczne sprawdzam same stringi nie hashe
                         // jezeli sa rowne
-                        if(PasswordValidator.valid(rawPassword)) {
+                        if(PasswordValidator.valid(rawPassword)) { //walidacja mocy hasla
 
                             boolean checUsernameStatus = false; // na poczatku daje na false
                             try {
@@ -61,14 +67,11 @@ public class MainActivity extends Activity {
                             }
 
                             if (checUsernameStatus == true) { // login wolny
-                                // TODO wymuśić mocne hasla na użytkowniku
-                                Boolean registerStatus = null;
+                                Boolean registerStatus = false;
                                 try {
-                                    UserData.getInstance(rawUsername);
-                                    UserData.getInstance("").setDatabaseRawPassword(rawPassword);
+                                    // niech baza przejmuje sie usuwaniem danych NIE widok
                                     NoteDatabase.getInstance(MainActivity.this); // tu sie po raz pierwszy utworzy baza z haslem
                                     // jak sie utworzy to usuwam dane o uzytkowniku
-                                    UserData.getInstance("").setDatabaseRawPassword("");
                                 } catch (Exception e) {
                                     Toast.makeText(getApplicationContext(), "Rejestracja błąd - tworzenie danych do drugiej bazy", Toast.LENGTH_LONG).show();
                                 }

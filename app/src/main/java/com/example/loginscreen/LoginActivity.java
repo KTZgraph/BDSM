@@ -36,7 +36,15 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String rawUsername = textUsername.getText().toString();
+                UserData userData = UserData.getInstance();
+                try {
+                    userData.setHashUsername(rawUsername); //TODO
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 String rawPassword = textUserPassword.getText().toString();
+                userData.setDatabaseRawPassword(rawPassword); // TODO
 
                 Boolean loginStatus = false;
                 try {
