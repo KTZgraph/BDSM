@@ -56,10 +56,18 @@ public class LoginActivity extends Activity {
                 Log.i("LOGIN", "przed bazą danych");
                 Log.i("LOGIN", "wartosc: " + loginStatus);
                 if (loginStatus == true) {
+                    // TODO nie moge sie dostac do swojej bazy
+                    try {
+                        userData.setHashUsername(rawUsername); //TODO jeszcze dla pewnosci kolejny raz nadpisuje
+                        NoteDatabase.getInstance(LoginActivity.this, userData.getHashUsername()); // tu sie po raz pierwszy utworzy baza z haslem
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     Toast.makeText(getApplicationContext(), "Zalgowano pomyślnie", Toast.LENGTH_SHORT).show();
                     Log.i("Login", "Zalgowano pomyślnie: " + rawUsername);
 
                     Intent noteIntent = new Intent(LoginActivity.this, NoteActivity.class);
+                    noteIntent.putExtra("username", userData.getHashUsername()); // TODO
                     startActivity(noteIntent);
                 } else
                     Toast.makeText(getApplicationContext(), "Nieprawidłowy login lub hasło", Toast.LENGTH_SHORT).show();

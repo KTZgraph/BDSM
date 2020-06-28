@@ -45,7 +45,7 @@ public class EditActivity extends AppCompatActivity {
         this.oldRawNotePassword = intentEditNote.getStringExtra("rawPassword");
 
         try {
-            db =  NoteDatabase.getInstance(EditActivity.this);
+            db =  NoteDatabase.getInstance(EditActivity.this, ""); //tu baza juz istnieje
             note = db.getNote(id);
         } catch (Exception e) {
             e.printStackTrace();

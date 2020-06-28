@@ -38,11 +38,14 @@ public class NoteActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Wszystkie Notatki");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Intent intentDetailsActivity = getIntent();
+        String dbUsername = intentDetailsActivity.getStringExtra("username");
 
         NoteDatabase db = null;
 
         try {
-            db = NoteDatabase.getInstance(NoteActivity.this);
+            // TODO tu sie wykrzacza
+            db = new NoteDatabase(NoteActivity.this, dbUsername); //tu baza juz istnieje
             Log.i("NoteDatabase db", "db: " + db);
             allNotes = db.getAllNotes();
 

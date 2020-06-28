@@ -45,7 +45,7 @@ public class DetailsActivity extends AppCompatActivity {
         this.noteRawPassword = intentDetailsActivity.getStringExtra("noteRawPassword");
 
         try {
-            db = NoteDatabase.getInstance(DetailsActivity.this);
+            db = NoteDatabase.getInstance(DetailsActivity.this, ""); //tu baza jest juz zrobiona
             note = db.getNote(id);
         } catch (Exception e) {
             e.printStackTrace();

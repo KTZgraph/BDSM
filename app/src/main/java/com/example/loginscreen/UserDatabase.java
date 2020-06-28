@@ -150,11 +150,13 @@ public class UserDatabase extends SQLiteOpenHelper {
         // cos ten obiekt ma jak dane sesyjne; biedna autoryzacja
 
 
+
         // =? zabezpiecza przed SQLi bo caloś traktowana jak string
-        Cursor cursor = db.rawQuery("SELECT password FROM user WHERE username=?", new String[]{userData.getHashUsername()});
+        Cursor cursor = db.rawQuery("SELECT password from user where username=?", new String[] {userData.getHashUsername()});
+
         Log.i("DBHelper", "Kolumny: " + cursor.getColumnNames());
 
-        if (cursor != null && cursor.getCount() > 0) {
+        if (cursor != null && cursor.getCount() > 0) { //Dlaczego naglet utaj jest nullem?
             cursor.moveToFirst();
             String hashPassword = cursor.getString(cursor.getColumnIndex("password"));
 

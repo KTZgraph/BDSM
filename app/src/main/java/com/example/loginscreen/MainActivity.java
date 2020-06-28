@@ -68,13 +68,13 @@ public class MainActivity extends Activity {
 
                             if (checUsernameStatus == true) { // login wolny
                                 Boolean registerStatus = false;
-                                try {
+//                                try {
                                     // niech baza przejmuje sie usuwaniem danych NIE widok
-                                    NoteDatabase.getInstance(MainActivity.this); // tu sie po raz pierwszy utworzy baza z haslem
+//                                    NoteDatabase.getInstance(MainActivity.this); // tu sie po raz pierwszy utworzy baza z haslem
                                     // jak sie utworzy to usuwam dane o uzytkowniku
-                                } catch (Exception e) {
-                                    Toast.makeText(getApplicationContext(), "Rejestracja błąd - tworzenie danych do drugiej bazy", Toast.LENGTH_LONG).show();
-                                }
+//                                } catch (Exception e) {
+//                                    Toast.makeText(getApplicationContext(), "Rejestracja błąd - tworzenie danych do drugiej bazy", Toast.LENGTH_LONG).show();
+//                                }
 
                                 try {
                                     registerStatus = db.register(rawUsername, rawPassword);

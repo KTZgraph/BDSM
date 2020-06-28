@@ -98,7 +98,7 @@ public class AddNote extends AppCompatActivity {
 
                 try {
                     note = new Note(rawPassword.getText().toString(), rawNoteContent.getText().toString(), todaysDate, currentTime); //TODO
-                    NoteDatabase db = NoteDatabase.getInstance(AddNote.this);
+                    NoteDatabase db = NoteDatabase.getInstance(AddNote.this, ""); //tu juz jest stworzona
                     db.addNote(note);
                     Toast.makeText(this, "Notatka zapisana", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {

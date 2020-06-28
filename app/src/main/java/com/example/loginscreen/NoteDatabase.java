@@ -44,11 +44,29 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
 
 
-    static public  NoteDatabase getInstance(Context context) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    static public  NoteDatabase getInstance(Context context, String hashUsername) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         if(instance == null){ //TODO - tutaj PROBLEMY
             synchronized (NoteDatabase.class) {
                 if(instance == null) { // podwojny chceck w singletonie
-                    instance = new NoteDatabase(context);
+                    if(hashUsername.isEmpty()){
+                        Log.i("!!!!!!!!!", "--------------------------------------------------------------------------");
+
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                        Log.i("!!!!!!!!!", "Gdzies ktos przekreca nazwe usera");
+                    }
+                    instance = new NoteDatabase(context, hashUsername);
                 }
             }
         }return instance;
@@ -67,8 +85,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
 
 
-    public NoteDatabase(Context context) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        super(context, BASE_DATABASE_NAME + UserData.getInstance().getHashUsername() + ".db", null, DATABASE_VERSION);
+    public NoteDatabase(Context context, String hashUsername) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        super(context, BASE_DATABASE_NAME + hashUsername + ".db", null, DATABASE_VERSION);
     }
 
 
