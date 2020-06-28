@@ -36,7 +36,6 @@ public class NoteDatabase extends SQLiteOpenHelper {
     private static final String KEY_DATE = "date";
     private static final String KEY_TIME = "time";
     private static final String KEY_CIPHERTEXT = "ciphertext";
-    private static final String KEY_SECRET = "secret";
     private static final String KEY_SALT = "salt";
     private static final String KEY_IV = "iv";
 
@@ -82,7 +81,6 @@ public class NoteDatabase extends SQLiteOpenHelper {
                     KEY_TIME        + " TEXT, " +
                     KEY_DATE        + " TEXT, " +
                     KEY_CIPHERTEXT  + " TEXT, " +
-                    KEY_SECRET      + " TEXT, " +
                     KEY_SALT        + " TEXT, " +
                     KEY_IV          + " TEXT " +
                 ")";
@@ -108,7 +106,6 @@ public class NoteDatabase extends SQLiteOpenHelper {
         contentValues.put(KEY_TIME, note.getTime());
         contentValues.put(KEY_DATE, note.getDate());
         contentValues.put(KEY_CIPHERTEXT, note.getCiphertext());
-        contentValues.put(KEY_SECRET, note.setSecretPBKDF2Key().toString());
         contentValues.put(KEY_SALT, note.getSalt());
         contentValues.put(KEY_IV, note.getIv());
 
@@ -131,7 +128,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
                         KEY_TIME,
                         KEY_DATE,
                         KEY_CIPHERTEXT,
-                        KEY_SECRET,
+//                        KEY_SECRET,
                         KEY_SALT,
                         KEY_IV
                         }, KEY_ID + "=?",
@@ -148,9 +145,6 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
         // trewsc notatki
         note.setCiphertext(cursor.getString(cursor.getColumnIndex(KEY_CIPHERTEXT)));
-
-        // hasło aes
-        note.setSecretPBKDF2Key(cursor.getString(cursor.getColumnIndex(KEY_SECRET)));
 
         // sól
         note.setSalt(cursor.getBlob(cursor.getColumnIndex(KEY_SALT)));
@@ -180,9 +174,6 @@ public class NoteDatabase extends SQLiteOpenHelper {
                 // trewsc notatki
                 note.setCiphertext(cursor.getString(cursor.getColumnIndex(KEY_CIPHERTEXT)));
 
-                // hasło aes
-                note.setSecretPBKDF2Key(cursor.getString(cursor.getColumnIndex(KEY_SECRET)));
-
                 // sól
 //                note.setSalt(cursor.getString(cursor.getColumnIndex(KEY_SALT)));
                 byte[] salt = cursor.getBlob(cursor.getColumnIndex(KEY_SALT));
@@ -203,12 +194,11 @@ public class NoteDatabase extends SQLiteOpenHelper {
 //        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE);
         SQLiteDatabase db = instance.getWritableDatabase(); // TODO  PASS_PHARSE
         ContentValues contentValues = new ContentValues();
-        Log.d("EDITED DB", "Edited password -> " + note.setSecretPBKDF2Key() + "\n ID ->" + note.getID());
+        Log.d("EDITED DB", "Edited password -> nowa sol i iv "+ "\n ID ->" + note.getID());
         contentValues.put(KEY_DATE, note.getDate());
         contentValues.put(KEY_TIME, note.getTime());
 
         contentValues.put(KEY_CIPHERTEXT, note.getCiphertext());
-        contentValues.put(KEY_SECRET, note.setSecretPBKDF2Key());
         contentValues.put(KEY_SALT, note.getSalt());
         contentValues.put(KEY_IV, note.getIv());
 

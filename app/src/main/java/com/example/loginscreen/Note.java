@@ -40,11 +40,11 @@ public class Note {
             2020 - 2012 = 8
             8/ 2 = 4
             4 * 64 000 =  256 000‬
+            Można walnać losowe liczbe iteracji
+            https://crypto.stackexchange.com/questions/3484/pbkdf2-and-salt
+            Note that storing (also in cleartext) a variable number of iterations per user also helps. Instead of always running PBKDF2 64,000 time, instead generate a random salt, and a random number I between 1 and 20,000. Run PBKDF2 64,000 + I times for that particular username. This makes cracking it just a little more difficult, and may prevent certain optimizations in cracking code from being useful.
+
              */
-
-
-
-
 
 
     Note(){}
@@ -65,14 +65,21 @@ public class Note {
     }
 
     public void update(String newRawPassword, String OldRawPassword, String rawNewContent) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        // Nie edytuje daty - jest sata stworzenia tylko
+
         if (newRawPassword.isEmpty()){
             this.ciphertext = encrypt(OldRawPassword, rawNewContent);
-
-        }else{
+            // bo juz podal haslo i jest ok tylko zmienia kontekst
+            // nie ma nic porownywane
+        }
+        else{
+            // stare haslo podal zeby w ogle wejsc w edycje, przecie znie bedzie pisac 5 razy hasla
+            // bez hasla nawet tu nie wejdzie
             this.salt = generateSalt();
             this.ciphertext = encrypt(newRawPassword, rawNewContent);
         }
     }
+
 
     public long getID() {
         return ID;
@@ -98,31 +105,23 @@ public class Note {
         this.time = time;
     }
 
-    public String setSecretPBKDF2Key() {
-        // zwracam Stringa latwiej ze wzgldu na DB
-        // https://stackoverflow.com/questions/5355466/converting-secret-key-into-a-string-and-vice-versa
-
-        if (secretPBKDF2Key != null) { //POROWNUJE MOJ KLUCZ Z BAZY
-            return  Base64.encodeToString(secretPBKDF2Key.getEncoded(), Base64.DEFAULT);
-        }
-        return "Jakis babol w luczach";
-    }
-
-
-    public void setSecretPBKDF2Key(String stringKey) {
-        // ustawiam klucz ze stringa - latwiej ze wzgldu na DB
-        byte[] encodedKey     = Base64.decode(stringKey, Base64.DEFAULT);
-        SecretKey originalKey = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
-        this.secretPBKDF2Key = originalKey;
-    }
-    
 
     public byte[] getSalt() {
         return salt;
     }
 
     public void setSalt(byte[] salt) {
+        /*Czy przechowywać sól w bazie? - Można jako tekst jawny - pomga tylko na ataki slownikowe; ajak slabe haslo to
+        juz nic nie pomoze :<
+        *
+        * https://stackoverflow.com/questions/17551419/where-to-store-password-salt-and-how-to-get-it
+        * The salt can be stored together with the password-hash, so you can create a salt per password instead of per user. It is a common practice for password hash functions (slow key-derivation function like BCrypt or PBKDF2), to return the salt cleartext as part of the password hash, what means that you can store salt and hash together in a single database field.
+        To verificate an entered password, you first have to search for the password-hash (using the username or email), and then the function can extract the used salt from the stored password-hash and use it to compare the hashes. That should actually answer your question, databases usually don't have appropriate functions to hash passwords, so you cannot do the verification within an SQL-query, the verification will be done in the code.
+The     second salt is actually called a pepper, the best way to add this server-side secret is, to encrypt the already hashed password with this secret. In contrast to the hash, this will be a two-way encryption, what allows to exchange the key should this once be necessary.
+        *
+        **/
         this.salt = salt;
+
     }
 
     public byte[] getIv() {
@@ -154,20 +153,24 @@ public class Note {
 
     public byte[] generateSalt() throws NoSuchAlgorithmException, InvalidKeySpecException {
         /* Derive the key, given password and salt. */
+        /* Sól a pieprz o.Ó
+        https://crypto.stackexchange.com/questions/20578/definition-of-pepper-in-hash-functions
+
+        https://sekurak.pl/kompendium-bezpieczenstwa-hasel-atak-i-obrona/
+        3. Solenie haseł
+        Bezpieczna funkcja hashująca na wejściu przyjmuje wiadomość o dowolnym rozmiarze. Atakujący może stworzyć prosty słownik hasło-hash i własnoręcznie go uzupełnić o popularne wyrazy i ich hashe. W momencie wykradzenia haseł w postaci hashowanej wystarczy, że porówna je z hashami ze swojego słownika. Znalezione przypasowania będą oryginalnymi hasłami, które były wprowadzane przez użytkowników.
+
+        Sam proces tworzenia takiego słownika jest prosty, jednak wymaga bardzo dużych nakładów pamięciowych i obliczeniowych. Jednak gdy oryginał hasła jest wyrazem krótkim lub nieskomplikowanym, wtedy szybko znajdzie się w słowniku agresora, zapewniając mu udany atak.
+
+        Rozwiązanie problemu odzyskiwania hashy nieskomplikowanych haseł zostało opracowane już w 1979 roku. Metoda zaproponowana przez badaczy Morrisa oraz Thompsona, polega na dodaniu do każdego hasła losowej, n-bitowej wiadomości (tzw. soli). Sól jest dodawana do każdego hasła wpisywanego przez użytkownika i dopiero całość jest przekazywana do funkcji skrótu. Dzięki temu, nawet proste hasła takie jak 12345 w rzeczywistości są przechowywane jako wynik bezpiecznej funkcji hashującej h("12345pk&Dsx8Gd_1shFd4") (sól 16 bajtowa). Tworzący słownik atakujący stoi przed wielokrotnie trudniejszym zadaniem, które nawet przy krótkich solach może stać się niewykonalne ze względu na niezmiernie długi czas obliczeń.
+
+
+        * */
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[64];
         random.nextBytes(salt);
         //ustawainia soli w obiekcie
         return salt;
-    }
-
-    private Boolean checkOldPassword(String rawOldPassword) throws NoSuchAlgorithmException, InvalidKeySpecException { // TODO
-//        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-//        KeySpec spec = new PBEKeySpec(rawOldPassword.toCharArray(), getSalt(), 65536, 256);
-//        SecretKey tmp = factory.generateSecret(spec);
-//        SecretKeySpec secretPBKDF2Key = new SecretKeySpec(tmp.getEncoded(), "AES");
-
-        return true;
     }
 
     //https://howtodoinjava.com/security/aes-256-encryption-decryption/
@@ -193,15 +196,19 @@ public class Note {
             byte[] ivCode = new byte[16];
             SecureRandom random = new SecureRandom();
             random.nextBytes(ivCode);
+            //ŻADNEGO KLUCZA DO NOTATEK NIE ZAPISUJE W BAZIE
+            // Jak user nie pamieta hasla to elo jego problem - nie ma przypominajki i smuteczek; to nie webowka z resetowaniem prze emaila/smsa
+            // robie jak protonmail jak sie zapomni to sie Umarlo
+            // a jak ma byc przypominanie i poruwnywanie to zmienie to na bcrypta jak przy rejestracji
 
             IvParameterSpec ivspec = new IvParameterSpec(ivCode);
             setIv(ivspec.getIV()); //zapisuje iv
 
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             KeySpec spec = new PBEKeySpec(rawPassword.toCharArray(), getSalt(), this.iterationCountPBKDF2WithHmacSHA256, 256);
-            setSecretPBKDF2Key(spec.toString()); // przechowuje jako string bo baza ogarnia
+            // TODO spec tego tez nie moge trzymac w bazie bo sobie cracker zrobi ten kod i DUPA
 
-            SecretKey tmp = factory.generateSecret(spec);
+            SecretKey tmp = factory.generateSecret(spec); // generuje tez klucz na podstawie damucj wyzej
             SecretKeySpec secretKey = new SecretKeySpec(tmp.getEncoded(), "AES");
 
 
@@ -238,11 +245,12 @@ public class Note {
 
              */
             KeySpec spec = new PBEKeySpec(rawPassword.toCharArray(), getSalt(), this.iterationCountPBKDF2WithHmacSHA256, 256);
+            // TODO spec tego tez nie moge trzymac w bazie bo sobie cracker zrobi ten kod i DUPA
             SecretKey tmp = factory.generateSecret(spec);
             SecretKeySpec secretKey = new SecretKeySpec(tmp.getEncoded(), "AES");
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivspec);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivspec); // TODO secretKey nie moze byc w bazie
 //            return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
             return new String(cipher.doFinal(Base64.decode(strToDecrypt,  Base64.DEFAULT)));
         }
