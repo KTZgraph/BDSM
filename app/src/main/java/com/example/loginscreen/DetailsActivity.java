@@ -17,6 +17,9 @@ import android.widget.Toast;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
 
 public class DetailsActivity extends AppCompatActivity {
     NoteDatabase db;
@@ -43,16 +46,18 @@ public class DetailsActivity extends AppCompatActivity {
 
         try {
             db = NoteDatabase.getInstance(DetailsActivity.this);
+            note = db.getNote(id);
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(this, "[Exception] pobierania notatki", Toast.LENGTH_SHORT).show();
         }
-        note = db.getNote(id);
 
         getSupportActionBar().setTitle(note.getDate());
         String notePlaintText = note.getPlainText(this.noteRawPassword); //zrobione
         if (notePlaintText == null){
             Toast.makeText(this, "BLAD Podano nieprawidlowe haslo dla notatki", Toast.LENGTH_SHORT).show();
             // jak zle haslo to powrot do listy notatek
+            //musi zostac bo tak jest tylko widok szczegolow notatki i nie wiadomo o co chodzi
             startActivity(new Intent(getApplicationContext(), NoteActivity.class)); //przekirowanie do głownego activity
         }
         detailsOfNote.setText(notePlaintText);
@@ -62,10 +67,14 @@ public class DetailsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.deleteNote(note.getID());
-                startActivity(new Intent(getApplicationContext(), NoteActivity.class)); //przekirowanie do głownego activity
-                Toast.makeText(getApplicationContext(), "Notatka usunięta!", Toast.LENGTH_SHORT).show();
-
+                try {
+                    db.deleteNote(note.getID());
+                    startActivity(new Intent(getApplicationContext(), NoteActivity.class)); //przekirowanie do głownego activity
+                    Toast.makeText(getApplicationContext(), "Notatka usunięta!", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Bład usuwania notatki db.deleteNote(note.getID())!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

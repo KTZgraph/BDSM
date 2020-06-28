@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 
 public class EditActivity extends AppCompatActivity {
@@ -28,7 +30,7 @@ public class EditActivity extends AppCompatActivity {
     Calendar calendar;
     String todaysDate;
     String currentTime;
-    EditText oldRawNotePassword; //stare haslo dla notatki
+    String oldRawNotePassword; //stare haslo dla notatki
     EditText noteRawNewPassword; // nowe haslo
     EditText noteRawNewPasswordConfirm; // potwierdzenie nowego hasla
 
@@ -44,14 +46,16 @@ public class EditActivity extends AppCompatActivity {
         Intent intentEditNote = getIntent();
         Long id = intentEditNote.getLongExtra("noteID", 0);
         // do tego widoku i tak nie da się przejsc bez wczesniejszego rozszyfrowania i podania prawidlowego hasla
-        String passwordFromDetailsAcitivity = intentEditNote.getStringExtra("rawPassword");
+        this.oldRawNotePassword = intentEditNote.getStringExtra("rawPassword");
 
         try {
             db =  NoteDatabase.getInstance(EditActivity.this);
+            note = db.getNote(id);
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(this, " NoteDatabase.getInstance(EditActivity.this)!", Toast.LENGTH_LONG).show();
+
         }
-        note = db.getNote(id);
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.heart_back);
@@ -60,7 +64,6 @@ public class EditActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Edycja");
 
 
-        oldRawNotePassword = findViewById(R.id.oldRawNotePassword);
         noteRawNewPassword = findViewById(R.id.noteRawNewPassword);
         noteRawNewPasswordConfirm = findViewById(R.id.noteRawNewPasswordConfirm);
         noteDetails = findViewById(R.id.rawNoteContent);
@@ -69,28 +72,9 @@ public class EditActivity extends AppCompatActivity {
         //  ------------------------ UPDATE NOTATKI ------------------------
         // zrobione
         // ROZSZYFROWANIE NOTATKI na potrzeby widoku jak bedzie zle haslo to tu nawet nie wjedzie
-        noteDetails.setText(note.getPlainText(passwordFromDetailsAcitivity)); //surowe haslo od uzytkownika
+        noteDetails.setText(note.getPlainText(this.oldRawNotePassword)); //surowe haslo od uzytkownika
         noteDetails.setMovementMethod(new ScrollingMovementMethod());
 
-        oldRawNotePassword.addTextChangedListener(new TextWatcher() {
-            // EDYCJA HASLA
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length() != 0 || s.equals("") || s.equals(" ")){
-                    getSupportActionBar().setTitle("Edytowanie hasla dla tej notatki");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
         //get current date and time
         calendar = Calendar.getInstance();
@@ -126,9 +110,8 @@ public class EditActivity extends AppCompatActivity {
             try {
                 String newPassword = noteRawNewPassword.getText().toString();
                 String newPasswordConfirmation = noteRawNewPasswordConfirm.getText().toString();
-                String oldPassword = oldRawNotePassword.getText().toString();
                 if(newPassword.equals(newPasswordConfirmation)){
-                    note.update(newPassword, oldPassword, rawNewConente);
+                    note.update(newPassword, this.oldRawNotePassword, rawNewConente);
                 }else{
                     Toast.makeText(this, "Błąd aktualizacji! Nowe hasła róznią się!", Toast.LENGTH_SHORT).show();
                 }
@@ -138,7 +121,15 @@ public class EditActivity extends AppCompatActivity {
                 Log.d("Edit activity", "Note update error");
             }
 
-            int id = db.editNote(note);
+            int id = 0;
+            try {
+                id = db.editNote(note);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Błąd db.editNote(note)!", Toast.LENGTH_SHORT).show();
+            }
+
+
             if(id >= 0){
                 Toast.makeText(this, "Notatka zaktualizowana", Toast.LENGTH_SHORT).show();
 

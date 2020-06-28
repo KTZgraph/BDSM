@@ -44,6 +44,7 @@ public class NoteActivity extends AppCompatActivity {
         try {
             db = NoteDatabase.getInstance(NoteActivity.this);
             Log.i("NoteDatabase db", "db: " + db);
+            allNotes = db.getAllNotes();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,7 +52,6 @@ public class NoteActivity extends AppCompatActivity {
             Log.i("BAza", e.toString());
         } // TODo wyjątki
 
-        allNotes = db.getAllNotes();
 
         recyclerView = findViewById(R.id.listOfNotes);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

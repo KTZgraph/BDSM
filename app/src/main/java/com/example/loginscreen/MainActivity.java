@@ -40,18 +40,18 @@ public class MainActivity extends Activity {
         cardViewRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = textUsername.getText().toString();
+                String rawUsername = textUsername.getText().toString();
                 String rawPassword = textUserPassword.getText().toString();
                 String rawPasswordConfirmation = textUserPasswordConfirmation.getText().toString();
 
-                if(username.isEmpty() || rawPassword.isEmpty() || rawPasswordConfirmation.isEmpty()){
+                if(rawUsername.isEmpty() || rawPassword.isEmpty() || rawPasswordConfirmation.isEmpty()){
                     Toast.makeText(getApplicationContext(), "Wymagane pola są puste", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     if (rawPassword.equals(rawPasswordConfirmation)){ // podane hasła identyczne sprawdzam same stringi nie hashe
                         boolean checUsernameStatus = false;
                         try {
-                            checUsernameStatus = db.checkUsername(username);
+                            checUsernameStatus = db.checkUsername(rawUsername);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -59,9 +59,18 @@ public class MainActivity extends Activity {
                         if( checUsernameStatus== true){ // login wolny
                             // TODO wymuśić mocne hasla na użytkowniku
                             Boolean registerStatus = null;
+                            try {
+                                UserData.getInstance(rawUsername);
+                                UserData.getInstance("").setDatabaseRawPassword(rawPassword);
+                                NoteDatabase.getInstance(MainActivity.this); // tu sie po raz pierwszy utworzy baza z haslem
+                                // jak sie utworzy to usuwam dane o uzytkowniku
+                                UserData.getInstance("").removeData();
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), "Rejestracja błąd - tworzenie danych do drugiej bazy", Toast.LENGTH_LONG).show();
+                            }
 
                             try {
-                                registerStatus = db.register(username, rawPassword);
+                                registerStatus = db.register(rawUsername, rawPassword);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

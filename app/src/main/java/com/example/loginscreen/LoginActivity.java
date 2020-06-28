@@ -28,6 +28,11 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         db = new UserDatabase(this);
+        try { // jak uzytkownik przejdzie np wycofa sie do widoku logowania to jego dane sa usuwane
+            UserData.getInstance("").removeData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         textUsername = (EditText) findViewById(R.id.textUsername);

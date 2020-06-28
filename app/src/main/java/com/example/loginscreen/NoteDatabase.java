@@ -6,15 +6,15 @@ import android.util.Log;
 
 
 // ----------------- zamiana importów na umożliwienie szyfrowania bazy danych
-//import net.sqlcipher.Cursor;
-//import net.sqlcipher.database.SQLiteDatabase;
-//import net.sqlcipher.database.SQLiteDatabaseHook;
-//import net.sqlcipher.database.SQLiteOpenHelper;
+import net.sqlcipher.Cursor;
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteDatabaseHook;
+import net.sqlcipher.database.SQLiteOpenHelper;
 
 // ------------- bez szyfrowania
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+//import android.database.Cursor;
+//import android.database.sqlite.SQLiteDatabase;
+//import android.database.sqlite.SQLiteOpenHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -40,7 +40,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
     private static final String KEY_IV = "iv";
 
     //TODO
-    public static final String PASS_PHARSE = "!@#ABC"; // hasło dla bazy; na razie na sztywno
+//    public static final String PASS_PHARSE = "!@#ABC"; // hasło dla bazy; na razie na sztywno
 
 
 
@@ -54,10 +54,10 @@ public class NoteDatabase extends SQLiteOpenHelper {
         }return instance;
     }
 
-    /*
+
     private static SQLiteDatabaseHook hook = new SQLiteDatabaseHook(){ // TODO  PASS_PHARSE HOOK
         public void preKey(SQLiteDatabase database){
-            database.rawExecSQL("PRAGMA kdf_iter = 64000;");
+            database.rawExecSQL("PRAGMA kdf_iter = 64000;"); //TODO na wiecej iteracji to emulator umrze
 //            database.rawExecSQL("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;");
 //            database.rawExecSQL("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;");
 //            database.rawExecSQL("PRAGMA cipher = ‘aes-256-cfb’;"); // nie można zmieniac na CTR ani nawet na OFB :<
@@ -65,7 +65,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         public void postKey(SQLiteDatabase database){}
     };
 
-    */
+
 
     public NoteDatabase(Context context) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         super(context, BASE_DATABASE_NAME + UserData.getInstance("").getHashUsername() + ".db", null, DATABASE_VERSION);
@@ -97,10 +97,11 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
     }
 
-    public long addNote(Note note){
-        //SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE); //szyfrowanie
+    public long addNote(Note note) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        //SQLiteDatabase db = instance.getWritableDatabase(); //szyfrowanie
 
-        SQLiteDatabase db = instance.getWritableDatabase(); // TODO  PASS_PHARSE
+        String PASS_PHARSE = UserData.getInstance("").getDatabaseRawPassword();
+        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE); // TODO  PASS_PHARSE
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_TIME, note.getTime());
@@ -115,11 +116,12 @@ public class NoteDatabase extends SQLiteOpenHelper {
         return ID;
     }
 
-    public Note getNote(long id){
+    public Note getNote(long id) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         // ROZSZYFROWUJĘ DOPIERO W ACTIVITY
         //pobieranie pojedynczej notatki
         // "=?" zapobiega SQLInjection
-        SQLiteDatabase db = instance.getReadableDatabase(); // TODO  PASS_PHARSE
+        String PASS_PHARSE = UserData.getInstance("").getDatabaseRawPassword();
+        SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE); // TODO  PASS_PHARSE
 //        SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE);
         String query = "SELECT * from ";
         Cursor cursor = db.query(DATABASE_TABLE,
@@ -156,8 +158,10 @@ public class NoteDatabase extends SQLiteOpenHelper {
         return note;
     }
 
-    public List<Note> getAllNotes(){
-        SQLiteDatabase db = instance.getReadableDatabase(); // TODO  PASS_PHARSE
+    public List<Note> getAllNotes() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+        String PASS_PHARSE = UserData.getInstance("").getDatabaseRawPassword();
+        SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE); // TODO  PASS_PHARSE
 //        SQLiteDatabase db = instance.getReadableDatabase(PASS_PHARSE);
         List<Note> allNotes = new ArrayList<>();
         // wybieranie wszystkich danych z bazy
@@ -190,9 +194,11 @@ public class NoteDatabase extends SQLiteOpenHelper {
         return allNotes;
     }
 
-    public int editNote(Note note){
-//        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE);
-        SQLiteDatabase db = instance.getWritableDatabase(); // TODO  PASS_PHARSE
+    public int editNote(Note note) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+//        SQLiteDatabase db = instance.getWritableDatabase();
+
+        String PASS_PHARSE = UserData.getInstance("").getDatabaseRawPassword();
+        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE); // TODO  PASS_PHARSE
         ContentValues contentValues = new ContentValues();
         Log.d("EDITED DB", "Edited password -> nowa sol i iv "+ "\n ID ->" + note.getID());
         contentValues.put(KEY_DATE, note.getDate());
@@ -208,9 +214,10 @@ public class NoteDatabase extends SQLiteOpenHelper {
     }
 
 
-    void deleteNote(long id){
-//        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE);// TODO  PASS_PHARSE
-        SQLiteDatabase db = instance.getWritableDatabase();
+    void deleteNote(long id) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+//        SQLiteDatabase db = instance.getWritableDatabase();// TODO  PASS_PHARSE
+        String PASS_PHARSE = UserData.getInstance("").getDatabaseRawPassword();
+        SQLiteDatabase db = instance.getWritableDatabase(PASS_PHARSE); // TODO  PASS_PHARSE
         db.delete(DATABASE_TABLE, KEY_ID+"=?", new String[] {String.valueOf(id)});
         db.close();
     }
