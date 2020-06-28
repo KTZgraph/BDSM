@@ -18,6 +18,9 @@ public class UserData {
         this.hashUsername = hashUsername;
     }
 
+    public void setHashUsernameFromRaw(String rawUsername) throws NoSuchAlgorithmException {
+        this.hashUsername = SHA_512(rawUsername);
+    }
 
     public String getDatabaseRawPassword() {
         return databaseRawPassword;

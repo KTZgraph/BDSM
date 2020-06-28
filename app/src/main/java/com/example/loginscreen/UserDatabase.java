@@ -133,7 +133,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     //sprawdzanie loginu i hasła
     public Boolean login(String rawUsername, String rawPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         SQLiteDatabase db = this.getReadableDatabase();
-        userData = UserData.getInstance(rawUsername); // inicjalizacja danych użytkownika
+        userData = UserData.getInstance(rawUsername);
         UserData.getInstance(rawUsername).setDatabaseRawPassword(rawPassword); // haslo do drugiej bazy musi byc surowe
         // cos ten obiekt ma jak dane sesyjne; bieda autoryzacja
 

@@ -107,7 +107,11 @@ public class EditActivity extends AppCompatActivity {
                 String newPassword = noteRawNewPassword.getText().toString();
                 String newPasswordConfirmation = noteRawNewPasswordConfirm.getText().toString();
                 if(newPassword.equals(newPasswordConfirmation)){
-                    note.update(newPassword, this.oldRawNotePassword, rawNewConente);
+                    if(PasswordValidator.valid(newPassword)){
+                        note.update(newPassword, this.oldRawNotePassword, rawNewConente);
+                    }else{
+                        Toast.makeText(this, "Błąd aktualizacji! Slabe haslo!", Toast.LENGTH_SHORT).show();
+                    }
                 }else{
                     Toast.makeText(this, "Błąd aktualizacji! Nowe hasła róznią się!", Toast.LENGTH_SHORT).show();
                 }

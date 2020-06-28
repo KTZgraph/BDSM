@@ -94,14 +94,19 @@ public class AddNote extends AppCompatActivity {
         if (item.getItemId() == R.id.save){
             // Tworzenie nowej notatki
             Note note;
-            try {
-                note = new Note(rawPassword.getText().toString(), rawNoteContent.getText().toString(), todaysDate, currentTime); //TODO
-                NoteDatabase db = NoteDatabase.getInstance(AddNote.this);
-                db.addNote(note);
-                Toast.makeText(this, "Notatka zapisana", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Błąd - notatka nie zapisana", Toast.LENGTH_SHORT).show();
+            if(PasswordValidator.valid(rawPassword.getText().toString())) {
+
+                try {
+                    note = new Note(rawPassword.getText().toString(), rawNoteContent.getText().toString(), todaysDate, currentTime); //TODO
+                    NoteDatabase db = NoteDatabase.getInstance(AddNote.this);
+                    db.addNote(note);
+                    Toast.makeText(this, "Notatka zapisana", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Błąd - notatka nie zapisana", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                Toast.makeText(this, "Slabe haslo - notatka nie zapisana", Toast.LENGTH_SHORT).show();
             }
 
             goToParentActivity(); // powrot do rodzinca po dodaniu notatki
